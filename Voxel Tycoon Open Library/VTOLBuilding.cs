@@ -5,6 +5,9 @@ using VoxelTycoon.Buildings;
 
 namespace VTOL
 {
+    /// <summary>
+    /// Class with utility methods concerning buildings in Voxel Tycoon
+    /// </summary>
     public static class VTOLBuilding
     {
         /// <summary>
@@ -17,8 +20,7 @@ namespace VTOL
         {
             buildingUnderCursor = ObjectRaycaster.Get<T>(null);
 
-            if (buildingUnderCursor != null) return true;
-            else return false;
+            return (buildingUnderCursor != null);
         }
         
         /// <summary>
