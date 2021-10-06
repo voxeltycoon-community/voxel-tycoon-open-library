@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>VTOL</RootNamespace>
+    <Nullable>annotations</Nullable>
+    <Version>0.1.0</Version>
+    <Company>-</Company>
+    <NeutralLanguage>en</NeutralLanguage>
+    <RepositoryUrl>https://github.com/victorleblais/voxel-tycoon-open-library</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Description>A community-made open-source library containing functions to assist in developing mods for the game Voxel Tycoon.</Description>
+    <Authors>victorleblais, kevin4998, evertn, xmnovotny</Authors>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>victorleblais.github.io/voxel-tycoon-open-library</PackageProjectUrl>
+    <PackageTags>VoxelTycoon; game; library; modding</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
