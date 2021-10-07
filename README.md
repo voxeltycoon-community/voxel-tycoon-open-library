@@ -1,5 +1,5 @@
 <a href="https://voxeltycoon.xyz/">
-	<img src="https://voxeltycoon.xyz/assets/press/voxeltycoon_text.png" alt="The Voxel Tycoon Logo with their name written next to it." title="Voxel Tycoon Logo" align="right" width="25%">
+	<img src="https://cdn.discordapp.com/emojis/507727751801864192.png?size=128" alt="The Voxel Tycoon Thinking Logo" title="Voxel Tycoon Think Logo" align="right" width="25%" />
 </a>
 
 # Voxel Tycoon Open Library (VTOL)
@@ -9,7 +9,7 @@
 
 <p align="center">
 A community-made open-source library containing functions to assist in
-developing mods for the game [Voxel Tycoon](https://voxeltycoon.xyz/).
+developing mods for the game <a href="https://voxeltycoon.xyz/">Voxel Tycoon</a>.
 </p>
 
 <details open><summary><b>Table of Contents</b></summary>
@@ -79,7 +79,7 @@ testing purposes. If you do not own the game then you can buy it on Steam at:
 <div style="background-color:#282e39;margin:10px">
 <a href="https://store.steampowered.com/app/732050/Voxel_Tycoon/">
 	<span>
-		<img src="https://cdn.akamai.steamstatic.com/steam/apps/732050/capsule_184x69.jpg" alt="Steam Voxel Tycoon Logo" align="left>
+		<img src="https://cdn.akamai.steamstatic.com/steam/apps/732050/capsule_184x69.jpg" alt="Steam Voxel Tycoon Logo" align="left" />
 	</span>
 	<span>
 		Voxel Tycoon — a management sim set in the infinite voxel world.
@@ -88,8 +88,7 @@ testing purposes. If you do not own the game then you can buy it on Steam at:
 		trucks, and buses, and turn small towns into prosperous megacities with
 		a thriving economy!
 	</span>
-</a>
-</div>
+</a></div>
 
 #### GitHub Desktop (advised)
 
@@ -144,17 +143,17 @@ or contact us on the [Voxel Tycoon Discord Server](https://discord.gg/voxeltycoo
 
 ## ⚖️ License
 
-<p align="center">**[GNU Affero General Public License v3.0](/LICENSE)**</p>
+<p align="center"><a href="https://github.com/victorleblais/voxel-tycoon-open-library/blob/main/LICENSE"><b>GNU Affero General Public License v3.0</b></a></p>
 
-<p align="center">**Summary:** (This is not legal advice)</p>
-<p align="center">
+<p align="center"><b>Summary:</b> (This is not legal advice)</p>
+<p align="center"><i>
 Permissions of this strongest copy-left license are conditioned on making
 available complete source code of licensed works and modifications, which
 include larger works using a licensed work, under the same license. Copyright
 and license notices must be preserved. Contributors provide an express grant of
 patent rights. When a modified version is used to provide a service over a
 network, the complete source code of the modified version must be made available.
-</p>
+</i></p>
 
 | Permissions       | Limitations  | Conditions                     |
 | ----------------- | ------------ | ------------------------------ |
