@@ -85,9 +85,9 @@ testing purposes. If you do not own the game then you can buy it on Steam at:
 <a href="https://store.steampowered.com/app/732050/Voxel_Tycoon/">
 <table> <tr>
 	<td>
-		<img src="https://cdn.akamai.steamstatic.com/steam/apps/732050/capsule_184x69.jpg" alt="Steam Voxel Tycoon Logo" align="left" />
+		<img src="https://cdn.akamai.steamstatic.com/steam/apps/732050/capsule_184x69.jpg" alt="Steam Voxel Tycoon Logo" align="left" width="25%" />
 	</td>
-	<td style="color:black">
+	<td>
 		Voxel Tycoon — a management sim set in the infinite voxel world.
 		Mine resources and process them into goods on your custom factories.
 		Set up supply chains and passenger routes with a huge fleet of trains,
@@ -153,7 +153,7 @@ or contact us on the [Voxel Tycoon Discord Server](https://discord.gg/voxeltycoo
 <h3 align="center"><a href="https://github.com/victorleblais/voxel-tycoon-open-library/blob/main/LICENSE"><b>GNU Affero General Public License v3.0</b></a></h3>
 
 <p align="center"><b>Summary:</b> (This is not legal advice)</p>
-<p align="center"><i>
+<p align="justify"><i>
 Permissions of this strongest copy-left license are conditioned on making
 available complete source code of licensed works and modifications, which
 include larger works using a licensed work, under the same license. Copyright
@@ -180,6 +180,6 @@ public packages and awesome people.
 - [Unity](https://unity.com/) - The engine which allows for quick game
   development.
 - [Voxel Tycoon](https://voxeltycoon.xyz/) - The wonderful game which inspired
-  us to start developing this projeect.
+  us to start developing this project.
 
 ## Acknowledgments
