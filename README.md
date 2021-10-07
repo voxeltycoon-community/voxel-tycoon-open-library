@@ -1,11 +1,17 @@
 <a href="https://voxeltycoon.xyz/">
-	<img src="https://cdn.discordapp.com/emojis/507727751801864192.png?size=128" alt="The Voxel Tycoon Thinking Logo" title="Voxel Tycoon Think Logo" align="right" width="25%" />
+	<img src="https://cdn.discordapp.com/emojis/507727751801864192.png?size=64" alt="The Voxel Tycoon Thinking Logo" title="Voxel Tycoon Think Logo" align="right" width="64px" />
 </a>
 
-# Voxel Tycoon Open Library (VTOL)
+<h1 align="center">Voxel Tycoon Open Library (VTOL)</h1>
 
-[![GitHub all releases](https://img.shields.io/github/downloads/victorleblais/voxel-tycoon-open-library/total?color=success&label=Downloads)](https://github.com/victorleblais/voxel-tycoon-open-library/releases)
-[![GitHub license](https://img.shields.io/github/license/victorleblais/voxel-tycoon-open-library?color=informational&label=License)](https://github.com/victorleblais/voxel-tycoon-open-library/blob/main/LICENSE)
+<p align="center">
+	<a href="https://github.com/victorleblais/voxel-tycoon-open-library/releases">
+		<img src="https://img.shields.io/github/downloads/victorleblais/voxel-tycoon-open-library/total?color=success&label=Downloads"/ alt="The GitHub Downloads">
+	</a>
+	<a href="https://github.com/victorleblais/voxel-tycoon-open-library/blob/main/LICENSE">
+		<img src="https://img.shields.io/github/license/victorleblais/voxel-tycoon-open-library?color=informational&label=License"/ alt="The GitHub License">
+	</a>
+</p>
 
 <p align="center">
 A community-made open-source library containing functions to assist in
@@ -76,19 +82,20 @@ Since this library is made as a mod for [Voxel Tycoon](https://voxeltycoon.xyz/)
 we do expect all contributors to have a copy of the game which they can use for
 testing purposes. If you do not own the game then you can buy it on Steam at:
 
-<div style="background-color:#282e39;margin:10px">
 <a href="https://store.steampowered.com/app/732050/Voxel_Tycoon/">
-	<span>
+<table> <tr>
+	<td>
 		<img src="https://cdn.akamai.steamstatic.com/steam/apps/732050/capsule_184x69.jpg" alt="Steam Voxel Tycoon Logo" align="left" />
-	</span>
-	<span>
+	</td>
+	<td style="color:black">
 		Voxel Tycoon — a management sim set in the infinite voxel world.
 		Mine resources and process them into goods on your custom factories.
 		Set up supply chains and passenger routes with a huge fleet of trains,
 		trucks, and buses, and turn small towns into prosperous megacities with
 		a thriving economy!
-	</span>
-</a></div>
+	</td>
+</tr> </table>
+</a>
 
 #### GitHub Desktop (advised)
 
@@ -143,7 +150,7 @@ or contact us on the [Voxel Tycoon Discord Server](https://discord.gg/voxeltycoo
 
 ## ⚖️ License
 
-<p align="center"><a href="https://github.com/victorleblais/voxel-tycoon-open-library/blob/main/LICENSE"><b>GNU Affero General Public License v3.0</b></a></p>
+<h3 align="center"><a href="https://github.com/victorleblais/voxel-tycoon-open-library/blob/main/LICENSE"><b>GNU Affero General Public License v3.0</b></a></h3>
 
 <p align="center"><b>Summary:</b> (This is not legal advice)</p>
 <p align="center"><i>
