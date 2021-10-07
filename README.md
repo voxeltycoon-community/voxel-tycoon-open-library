@@ -80,22 +80,8 @@ and you will be done with the Visual Studio environment installation.
 
 Since this library is made as a mod for [Voxel Tycoon](https://voxeltycoon.xyz/),
 we do expect all contributors to have a copy of the game which they can use for
-testing purposes. If you do not own the game then you can buy it on Steam at:
-
-<a href="https://store.steampowered.com/app/732050/Voxel_Tycoon/">
-<table> <tr>
-	<td>
-		<img src="https://cdn.akamai.steamstatic.com/steam/apps/732050/capsule_184x69.jpg" alt="Steam Voxel Tycoon Logo" align="left" width="25%" />
-	</td>
-	<td>
-		Voxel Tycoon — a management sim set in the infinite voxel world.
-		Mine resources and process them into goods on your custom factories.
-		Set up supply chains and passenger routes with a huge fleet of trains,
-		trucks, and buses, and turn small towns into prosperous megacities with
-		a thriving economy!
-	</td>
-</tr> </table>
-</a>
+testing purposes. If you do not own the game then you can buy it on
+[Steam](https://store.steampowered.com/app/732050/Voxel_Tycoon/).
 
 #### GitHub Desktop (advised)
 
