@@ -102,11 +102,35 @@ With GitHub desktop it is as easy as clicking in the top left **file** and then
 you have access to on GitHub, from here you can select the
 **Voxel Tycoon Open Library** repository and download it.
 
-For Visual Studio all you need to do is double click the
-**Voxel Tycoon Open Library.sln** solution inside your downloaded folder).
+Next we need to setup a user variable to point to our Voxel Tycoon game.
+The reason for this variable is so that all contributors can install Steam
+or Voxel Tycoon in a different folder and still being able to contribute.
+To add the variable you need to navigate to [the environmental variables](https://docs.oracle.com/en/database/oracle/machine-learning/oml4r/1.5.1/oread/creating-and-modifying-environment-variables-on-windows.html).
+On Windows 10 this can be reached as follows:
 
-After this you can use GitHub Desktop or your favourite Git system to commit
-new changes which you'VE made to your feature specific branch on GitHub.
+1. Right click on the Windows icon in the bottom left of your task bar.
+2. In this menu, select "System".
+3. Within the system info, there will be an extra menu on the right,
+   from this menu select the "Advanced system settings" text.
+4. A new window will pop-up for the System properties,
+   in here select the "Environment Variables..." button at the bottom.
+5. This menu will have 2 areas: User variables and System variables.
+   The first one is only for your account and the second one for everyone
+   using this PC. We will add our variable to the user variant in the top
+   by pressing the "New..." button.
+6. The name of our variable will be `VoxelTycoonInstallationDir` and the value
+   is the directory of your Voxel Tycoon game folder. The game folder is the one
+   containing the `VoxelTycoon.exe` and the important `VoxelTycoon_Data` folder.
+7. When that is all set, make sure to press **Ok** in all windows and that will
+   automatically save your settings.
+
+To test if the installation was a success, you can now open Visual Studio by
+double click the **Voxel Tycoon Open Library.sln** solution inside your
+downloaded project folder. If no errors pop up than the installation has been
+successful!
+
+From now on you can use GitHub Desktop or your favourite Git system to commit
+new changes which you've made to your feature specific branch on GitHub.
 
 ## Running Tests
 
