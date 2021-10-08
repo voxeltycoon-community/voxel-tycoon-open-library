@@ -158,7 +158,7 @@ or contact us on the [Voxel Tycoon Discord Server](https://discord.gg/voxeltycoo
 - <span>![Personal_Builder pfp](https://cdn.discordapp.com/avatars/104632306676809728/031723c293aa44c81d7ae42f4e54de8e.webp?size=16)</span> <span>[Personal_Builder](https://github.com/kevin4998)</span>
 - <span>![Nebruzias pfp](https://cdn.discordapp.com/avatars/252190977207435266/a2b227048295861260c61f9816f4ca5a.webp?size=16)</span> <span>[Nebruzias](https://github.com/evertn)</span>
 - <span>![KyleRokuKyu pfp](https://cdn.discordapp.com/avatars/119493641944170496/c2d7b2fbfa05bc0e197b7aa281caac32.webp?size=16)</span> <span>[KyleRokuKyu](https://github.com/KyleRokuKyu)</span>
-- <span><img src="ttps://discord.com/assets/6f26ddd1bf59740c536d2274bb834a05.png" alt="Xmnovotny pfp" width="16px" /></span> <span>[Xmnovotny](https://github.com/xmnovotny)</span>
+- <span><img src="https://discord.com/assets/6f26ddd1bf59740c536d2274bb834a05.png" alt="Xmnovotny pfp" width="16px" /></span> <span>[Xmnovotny](https://github.com/xmnovotny)</span>
 
 ## ⚖️ License
 
