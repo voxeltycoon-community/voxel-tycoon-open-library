@@ -16,7 +16,7 @@ namespace VTOL
         /// <typeparam name="T">Type of building to look for.</typeparam>
         /// <param name="buildingUnderCursor">The returned building at the cursor position, otherwise <code>null</code>.</param>
         /// <returns>If a building is at the cursor position.</returns>
-        public static bool GetBuildingUnderCursor<T>(out T buildingUnderCursor) where T : Building
+        public static bool TryGetBuildingUnderCursor<T>(out T buildingUnderCursor) where T : Building
         {
             buildingUnderCursor = ObjectRaycaster.Get<T>(null);
 
