@@ -5,11 +5,11 @@
 <h1 align="center">Voxel Tycoon Open Library (VTOL)</h1>
 
 <p align="center">
-	<a href="https://github.com/victorleblais/voxel-tycoon-open-library/releases">
-		<img src="https://img.shields.io/github/downloads/victorleblais/voxel-tycoon-open-library/total?color=success&label=Downloads"/ alt="The GitHub Downloads">
+	<a href="https://github.com/voxeltycoon-community/voxel-tycoon-open-library/releases">
+		<img src="https://img.shields.io/github/downloads/voxeltycoon-community/voxel-tycoon-open-library/total?color=success&label=Downloads"/ alt="The GitHub Downloads">
 	</a>
-	<a href="https://github.com/victorleblais/voxel-tycoon-open-library/blob/main/LICENSE">
-		<img src="https://img.shields.io/github/license/victorleblais/voxel-tycoon-open-library?color=informational&label=License"/ alt="The GitHub License">
+	<a href="https://github.com/voxeltycoon-community/voxel-tycoon-open-library/blob/main/LICENSE">
+		<img src="https://img.shields.io/github/license/voxeltycoon-community/voxel-tycoon-open-library?color=informational&label=License"/ alt="The GitHub License">
 	</a>
 </p>
 
@@ -162,7 +162,7 @@ or contact us on the [Voxel Tycoon Discord Server](https://discord.gg/voxeltycoo
 
 ## ⚖️ License
 
-<h3 align="center"><a href="https://github.com/victorleblais/voxel-tycoon-open-library/blob/main/LICENSE"><b>GNU Affero General Public License v3.0</b></a></h3>
+<h3 align="center"><a href="https://github.com/voxeltycoon-community/voxel-tycoon-open-library/blob/main/LICENSE"><b>GNU Affero General Public License v3.0</b></a></h3>
 
 <p align="center"><b>Summary:</b> (This is not legal advice)</p>
 <p align="justify"><i>
