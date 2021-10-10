@@ -10,8 +10,7 @@ using VoxelTycoon.Game.UI;
 namespace VTOL.ModSettings
 {
     [Harmony]
-    [UsedImplicitly]
-    class VTOLModSettingsWindowManager: LazyManager<VTOLModSettingsWindowManager>
+    public class VTOLModSettingsWindowManager: LazyManager<VTOLModSettingsWindowManager>
     {
         private readonly Dictionary<string, ModData> _registered = new Dictionary<string, ModData>();
 
@@ -19,11 +18,6 @@ namespace VTOL.ModSettings
         {
             public string Title;
             public UnityAction Show;
-        }
-
-        private static void ShowWindow<T>(string title) where T : VTOLModSettingsWindowPage
-        {
-            VTOLModSettingsWindow.ShowFor<T>(title);
         }
 
         public void Register<T>(string modClassName, string title) where T : VTOLModSettingsWindowPage
@@ -40,8 +34,14 @@ namespace VTOL.ModSettings
             _registered.Remove(modClassName);
         }
 
+        private static void ShowWindow<T>(string title) where T : VTOLModSettingsWindowPage
+        {
+            VTOLModSettingsWindow.ShowFor<T>(title);
+        }
+
         [HarmonyPostfix]
         [HarmonyPatch(typeof(GameSettingsWindowPacksPage), "AddToggle")]
+        [UsedImplicitly]
         // ReSharper disable once InconsistentNaming
         private static void AddToggle_pof(SettingsWindowDropdownItem __result, GameSettingsWindowPacksPage __instance, GameSettingsWindowPacksPageItem item)
         {

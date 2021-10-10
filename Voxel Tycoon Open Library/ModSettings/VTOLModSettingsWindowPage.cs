@@ -4,11 +4,11 @@ namespace VTOL.ModSettings
 {
     public abstract class VTOLModSettingsWindowPage : GameSettingsWindowPage
     {
-        protected override bool HasFooter { get => false; }
+        protected override bool HasFooter => false;
 
         public void Initialize()
         {
-            base.InitializePage();
+            InitializePage();
         }
     }
 }

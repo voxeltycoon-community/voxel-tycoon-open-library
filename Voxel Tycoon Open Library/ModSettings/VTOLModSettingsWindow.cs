@@ -5,7 +5,7 @@ using VoxelTycoon.UI.Windows;
 
 namespace VTOL.ModSettings
 {
-    class VTOLModSettingsWindow: RichWindow
+    public class VTOLModSettingsWindow: RichWindow
     {
         public static VTOLModSettingsWindow ShowFor<T>(string title) where T : VTOLModSettingsWindowPage
         {

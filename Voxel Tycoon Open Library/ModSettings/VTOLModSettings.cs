@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using VoxelTycoon;
 using VoxelTycoon.AssetManagement;
@@ -14,13 +15,14 @@ namespace VTOL.ModSettings
         protected bool Initialized { get; private set; }
         protected VTOLModSettings()
         {
-            this.Behaviour = UpdateBehaviour.Create(typeof(T).Name);
-            this.Behaviour.OnDestroyAction = delegate ()
+            Behaviour = UpdateBehaviour.Create(typeof(T).Name);
+            Behaviour.OnDestroyAction = delegate ()
             {
-                this.OnDeinitialize();
-                VTOLModSettings<T>._current = default(T);
+                OnDeinitialize();
+                _current = default(T);
             };
-            this.OnInitialize();
+            // ReSharper disable once VirtualMemberCallInConstructor
+            OnInitialize();
             Initialized = true;
         }
 
@@ -29,9 +31,9 @@ namespace VTOL.ModSettings
             get
             {
                 T result;
-                if ((result = VTOLModSettings<T>._current) == null)
+                if ((result = _current) == null)
                 {
-                    result = (VTOLModSettings<T>._current = Activator.CreateInstance<T>());
+                    result = (_current = Activator.CreateInstance<T>());
                 }
                 return result;
             }
@@ -54,7 +56,7 @@ namespace VTOL.ModSettings
             {
                 if (_modSettingsPath == null)
                 {
-                    string modNamespace = this.GetType().Namespace;
+                    string modNamespace = GetType().Namespace;
                     foreach (Pack pack in EnabledPacksPerSaveHelper.GetEnabledPacks())
                     {
                         if (pack.Name == modNamespace)
@@ -99,7 +101,7 @@ namespace VTOL.ModSettings
             }
         }
 
-        protected void SetProperty<U>(U value, ref U propertyField)
+        protected void SetProperty<TU>(TU value, ref TU propertyField)
         {
             if (!propertyField.Equals(value))
             {
