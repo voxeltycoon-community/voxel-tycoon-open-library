@@ -5,7 +5,7 @@
     <RootNamespace>VTOL</RootNamespace>
     <Nullable>disable</Nullable>
     <Version>0.1.0</Version>
-    <Company>-</Company>
+    <Company>Voxel Tycoon Community</Company>
     <NeutralLanguage>en</NeutralLanguage>
     <RepositoryUrl>https://github.com/voxeltycoon-community/voxel-tycoon-open-library</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -14,6 +14,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>voxeltycoon-community.github.io/voxel-tycoon-open-library</PackageProjectUrl>
     <PackageTags>VoxelTycoon; game; library; modding</PackageTags>
+    <Copyright>GNU Affero General Public License v3.0</Copyright>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
