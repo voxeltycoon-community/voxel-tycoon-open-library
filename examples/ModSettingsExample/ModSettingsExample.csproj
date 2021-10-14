@@ -13,25 +13,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\0Harmony.dll">
+    <Reference Include="0Harmony">
       <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\Assembly-CSharp.dll">
-      <HintPath>{$VoxelTycoonInstallationDir}\VoxelTycoon_Data\Managed\Assembly-CSharp.dll</HintPath>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\UnityEngine.CoreModule.dll">
-      <HintPath>{$VoxelTycoonInstallationDir}\VoxelTycoon_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
-    <Reference Include="$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\UnityEngine.TextRenderingModule.dll">
-      <HintPath>{$VoxelTycoonInstallationDir}\VoxelTycoon_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
     </Reference>
-    <Reference Include="$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\Newtonsoft.Json.dll">
-      <HintPath>{$VoxelTycoonInstallationDir}\VoxelTycoon_Data\Managed\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\UnityEngine.dll">
-      <HintPath>{$VoxelTycoonInstallationDir}\VoxelTycoon_Data\Managed\UnityEngine.dll</HintPath>
+    <Reference Include="UnityEngine.dll">
+      <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="Voxel Tycoon Open Library, Version=0.1.0.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="Voxel Tycoon Open Library">
       <HintPath>..\..\Voxel Tycoon Open Library\bin\Debug\netstandard2.0\Voxel Tycoon Open Library.dll</HintPath>
     </Reference>
   </ItemGroup>

@@ -1,4 +1,5 @@
-﻿using VoxelTycoon;
+﻿using UnityEngine;
+using VoxelTycoon;
 using VoxelTycoon.Game.UI;
 using VoxelTycoon.Localization;
 using VTOL.ModSettings;
@@ -20,7 +21,7 @@ namespace ModSettingsExample.UI
             //this will add a slider
             settingsControl.AddSlider(S.SliderInt, null,() => settings.SliderIntValue, delegate (float value)
             {
-                settings.SliderIntValue = value;
+                settings.SliderIntValue = Mathf.RoundToInt(value);
             }, 0f, 100f, value => value.ToString("N0"));
 
             //this will add a dropdown with On/Off options
