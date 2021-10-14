@@ -32,7 +32,7 @@ namespace VTOL.ModSettings
     [JsonObject(MemberSerialization.OptIn)]
     public abstract class VTOLModSettings<T> where T: VTOLModSettings<T>, new()
     {
-        private string _modSettingsFilePath;
+        private string modSettingsFilePath;
         protected bool Initialized { get; private set; }
         
         /// <summary>
@@ -45,7 +45,7 @@ namespace VTOL.ModSettings
             Behaviour.OnDestroyAction = delegate ()
             {
                 OnDeinitialize();
-                _current = default(T);
+                current = default(T);
             };
             // ReSharper disable once VirtualMemberCallInConstructor
             OnInitialize();
@@ -60,13 +60,19 @@ namespace VTOL.ModSettings
             get
             {
                 T result;
-                if ((result = _current) == null)
+                if ((result = current) == null)
                 {
-                    result = (_current = Activator.CreateInstance<T>());
+                    result = (current = Activator.CreateInstance<T>());
                 }
                 return result;
             }
         }
+        
+        /// <summary>
+        ///Mod's pack name (Pack.Name), it is a name of directory where mod is placed (for local mods), or where was placed at the moment of uploading to the Steam
+        /// Need to be specified in the descendant
+        /// </summary>
+        public abstract string ModPackName { get; } 
 
         private protected UpdateBehaviour Behaviour { get; private set; }
 
@@ -93,19 +99,18 @@ namespace VTOL.ModSettings
         {
             get
             {
-                if (_modSettingsFilePath == null)
+                if (modSettingsFilePath == null)
                 {
-                    string modNamespace = GetType().Namespace;
                     foreach (Pack pack in EnabledPacksPerSaveHelper.GetEnabledPacks())
                     {
-                        if (pack.Name == modNamespace)
+                        if (pack.Name == ModPackName)
                         {
-                            return _modSettingsFilePath = pack.Directory.FullName + "/settings.json";
+                            return modSettingsFilePath = pack.Directory.FullName + "/settings.json";
                         }
                     }
-                    throw new Exception("Mod '" + modNamespace + "' not found. Namespace of ModSettings class must be same as mod class name");
+                    throw new Exception("Mod '" + ModPackName + "' not found. Namespace of ModSettings class must be same as mod class name");
                 }
-                return _modSettingsFilePath;
+                return modSettingsFilePath;
             }
         }
 
@@ -173,7 +178,7 @@ namespace VTOL.ModSettings
             }
         }
 
-        private static T _current;
+        private static T current;
 
     }
 }

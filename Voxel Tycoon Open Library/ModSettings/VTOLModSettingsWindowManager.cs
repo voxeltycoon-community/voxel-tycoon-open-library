@@ -15,12 +15,10 @@ namespace VTOL.ModSettings
     /// <summary>
     /// Manager class for managing mod settings
     /// </summary>
-//    [Harmony]
+    [Harmony]
     public class VTOLModSettingsWindowManager: LazyManager<VTOLModSettingsWindowManager>
     {
-        const string HarmonyID = "vtol.modsettings.patch";
-        private readonly Dictionary<string, ModData> _registered = new Dictionary<string, ModData>();
-        private Harmony _harmony;
+        private readonly Dictionary<string, ModData> registered = new Dictionary<string, ModData>();
 
         private struct ModData
         {
@@ -31,50 +29,31 @@ namespace VTOL.ModSettings
         /// <summary>
         /// Will register specified window settings page type to the specified mod class
         /// </summary>
+        /// <param name="modPackName">Mod's pack name (Pack.Name), it is a name of directory where mod is placed (for local mods), or where was placed at the moment of uploading to the Steam</param>
         /// <param name="title">Window title</param>
-        /// <typeparam name="TMod">type of mod class (must have a unique namespace among other mods)</typeparam>
         /// <typeparam name="TPage">type of window's settings page, that will be shown for settings changes</typeparam>
         [UsedImplicitly]
-        public void Register<TMod, TPage>(string title) where TPage : VTOLModSettingsWindowPage where TMod : Mod
+        public void Register<TPage>([NotNull] string modPackName, string title) where TPage : VTOLModSettingsWindowPage
         {
-            FileLog.Log("Register");
+            if (string.IsNullOrEmpty(modPackName)) 
+                throw new ArgumentNullException(nameof(modPackName));
             ModData data = default;
             data.Title = title;
             data.Show = delegate () { ShowWindow<TPage>(title); };
 
-            _registered.Add(GetModClassNamespace<TMod>(), data);
+            registered.Add(modPackName, data);
         }
 
         /// <summary>
         /// Will unregister a mod class 
         /// </summary>
-        /// <typeparam name="TMod">Mod class</typeparam>
+        /// <param name="modPackName">Mod's pack name (Pack.Name), it is a name of directory where mod is placed (for local mods), or where was placed at the moment of uploading to the Steam</param>
         [UsedImplicitly]
-        public void Unregister<TMod>()
+        public void Unregister([NotNull] string modPackName)
         {
-            _registered.Remove(GetModClassNamespace<TMod>());
-        }
-
-        protected override void OnInitialize()
-        {
-            _harmony = new Harmony(HarmonyID);
-            MethodInfo addToggleOriginal = typeof(GameSettingsWindowPacksPage).GetMethod("AddToggle", BindingFlags.NonPublic | BindingFlags.Instance);
-            MethodInfo addTogglePostfix = GetType().GetMethod("AddToggle_pof", BindingFlags.NonPublic | BindingFlags.Static);
-            _harmony.Patch(addToggleOriginal, postfix: new HarmonyMethod(addTogglePostfix));
-        }
-
-        protected override void OnDeinitialize()
-        {
-            _harmony.UnpatchAll(HarmonyID);
-            _harmony = null;
-        }
-
-        private static string GetModClassNamespace<TMod>()
-        {
-            string nameSpace = typeof(TMod).Namespace;
-            if (nameSpace == null)
-                throw new ArgumentException("Cannot determine mod's namespace");
-            return nameSpace;
+            if (string.IsNullOrEmpty(modPackName)) 
+                throw new ArgumentNullException(nameof(modPackName));
+            registered.Remove(modPackName);
         }
 
         private static void ShowWindow<T>(string title) where T : VTOLModSettingsWindowPage
@@ -90,7 +69,7 @@ namespace VTOL.ModSettings
         {
             if (!(__instance is GameSettingsWindowInGamePacksPage)) return;
             
-            if (Current._registered.TryGetValue(item.Pack.Name, out var data))
+            if (Current.registered.TryGetValue(item.Pack.Name, out var data))
             {
                 Transform hint = __result.transform.Find("Row1/NameContainer/Hint");
                 Transform settings = UnityEngine.Object.Instantiate<Transform>(hint, hint.parent);
