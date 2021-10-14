@@ -1,0 +1,5 @@
+﻿{
+  "mod_settings_example/slider_int": "Example of integer slider",
+  "mod_settings_example/boolean_value": "Example of boolean value",
+  "mod_settings_example/boolean_value_desc": "Additional description"
+}
