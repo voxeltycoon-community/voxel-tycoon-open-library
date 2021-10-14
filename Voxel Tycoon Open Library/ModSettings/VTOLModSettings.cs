@@ -11,11 +11,12 @@ namespace VTOL.ModSettings
     /// Inherit this class in the mod project under mods namespace and add all needed properties
     /// </summary>
     /// <example>
-    /// Class declaration
+    /// <b> Class declaration </b>
     /// <code>
     /// Settings: &lt;VTOLModSettings&gt;
     /// </code>
-    /// Declaration of one property: 
+    /// 
+    /// <b> Declaration of one property: </b> 
     /// <code>
     ///    private bool _someProperty;
     ///
@@ -24,6 +25,8 @@ namespace VTOL.ModSettings
     ///        set =>  SetProperty(value, ref _someProperty);
     ///    }
     /// </code>
+    ///
+    /// More information about usage showed in example project under <b>examples/ModSettingsExample</b> folder
     /// </example>
     /// 
     [JsonObject(MemberSerialization.OptIn)]
@@ -31,6 +34,7 @@ namespace VTOL.ModSettings
     {
         private string _modSettingsFilePath;
         protected bool Initialized { get; private set; }
+        
         /// <summary>
         /// Event raised when some settings value is changed
         /// </summary>
