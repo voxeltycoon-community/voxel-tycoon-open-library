@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using VoxelTycoon;
 using VoxelTycoon.Buildings;
+using VoxelTycoon.Game;
 
 namespace VTOL
 {
@@ -15,14 +17,26 @@ namespace VTOL
         /// </summary>
         /// <typeparam name="T">Type of building to look for.</typeparam>
         /// <param name="buildingUnderCursor">The returned building at the cursor position, otherwise <code>null</code>.</param>
+        /// <param name="condition">A condition the building should meet.</param>
         /// <returns>If a building is at the cursor position.</returns>
-        public static bool TryGetBuildingUnderCursor<T>(out T buildingUnderCursor) where T : Building
+        public static bool TryGetBuildingUnderCursor<T>(out T buildingUnderCursor, Func<Component, bool> condition = null) where T : Building
         {
-            buildingUnderCursor = ObjectRaycaster.Get<T>(null);
+            if (condition == null)
+            {
+                Building building = GameUI.Current.BuildingUnderCursor;
+
+                if (building is T)
+                {
+                    buildingUnderCursor = building as T;
+                    return true;
+                }
+            }
+
+            buildingUnderCursor = ObjectRaycaster.Get<T>(condition);
 
             return (buildingUnderCursor != null);
         }
-        
+
         /// <summary>
         /// Will search for buildings within a given range from another building.
         /// </summary>
