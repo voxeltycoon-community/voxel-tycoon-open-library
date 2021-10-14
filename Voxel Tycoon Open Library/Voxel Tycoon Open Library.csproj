@@ -41,8 +41,17 @@
     <Reference Include="UnityEngine.PhysicsModule">
       <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\UnityEngine.UI.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UIModule">
       <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
 

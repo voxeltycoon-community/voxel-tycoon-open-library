@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <DebugType>portable</DebugType>
+    <UserSecretsId>9b7ea2c0-28dc-4f3f-a92d-6c02087cf6be</UserSecretsId>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.dll">
+      <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="Voxel Tycoon Open Library">
+      <HintPath>..\..\Voxel Tycoon Open Library\bin\Debug\netstandard2.0\Voxel Tycoon Open Library.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+  </ItemGroup>
+</Project>
