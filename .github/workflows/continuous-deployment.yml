@@ -1,0 +1,86 @@
+#
+# This is the main workflow for continuous deployment of the Voxel Tycoon
+# Open Library (VTOL). This file will compile the code into a .dll,
+# move it into a designated folder and then publish the content of this folder
+# to the Steam Workshop Item.
+#
+# Workflow Contributors: Personal_Builder
+#
+
+name: Continuous Deployment
+
+# When should this code be called?
+on:
+  push:
+    branches:
+      - master
+
+# What are all the things this process should do.
+jobs:
+  deploy:
+    # What is the current Job actually doing.
+    name: Deploy
+    # How should it perform its job.
+    strategy:
+      fail-fast: true
+      matrix:
+        # The system that will compile our project.
+        # This is just for the behind-the-scenes server, it should not
+        # effect the code itself.
+        os:
+          # - 'ubuntu-latest'
+          # - 'macOS-latest'
+          - 'windows-latest'
+        path:
+          - 'target'
+        # The version of C# which we are building with.
+        # This cannot be any version but it needs to be accessible
+        # when using "dotnet --lists-sdks" or be "dotnet --version"
+        csharp:
+          - '5.0.x'
+    # Where should it perform its job.
+    runs-on: ${{ matrix.os }}
+    # Specifies the maximum amount of time this may run.
+    timeout-minutes: 15
+    # What should this program be doing.
+    steps:
+      # Get the current project from master.
+      # https://github.com/marketplace/actions/checkout
+      - name: Checkout Project
+        uses: actions/checkout@v2.3.4
+        with:
+          # Large File Storage Support
+          lfs: false
+      # Store relevant information.
+      # https://github.com/marketplace/actions/cache
+      - name: Cache Relevant Folder
+        uses: actions/cache@v2.1.6
+        with:
+          path: ${{ github.workspace }}/.nuget/packages
+          key:  ${{ matrix.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ matrix.os }}-nuget-
+      # Install C-Sharp
+      # https://github.com/marketplace/actions/setup-net-core-sdk
+      - name: Install C-sharp
+        uses: actions/setup-dotnet@v1.8.2
+        with:
+          dotnet-version: ${{ matrix.csharp }}
+      # Build the library
+      # Using the command line build tools from .NET
+      - name: Build Library
+        run: dotnet build "${{ matrix.path }}" --configuration Release
+      # Tests the library
+      # Using the command line build tools from .NET
+      - name: Test Library
+        id: testRunner
+        run: dotnet test "${{ matrix.path }}"
+      # Submit it test results to show us.
+      # https://github.com/marketplace/actions/upload-a-build-artifact
+      - name: Upload the test results
+        uses: actions/upload-artifact@v2.2.4
+        if: failure()
+        with:
+          name: Test results
+          # Path of the runner with results.
+          path: ${{ steps.testRunner.outputs.artifactsPath }}
