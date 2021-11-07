@@ -12,19 +12,7 @@ namespace VTOL.Utils
     {
         private static StringWriter stringWriter;
 
-        private static StringWriter StringWriter
-        {
-            get
-            {
-                StringWriter result;
-                if ((result = stringWriter) == null)
-                {
-                    result = (stringWriter = new StringWriter());
-                }
-
-                return result;
-            }
-        }
+        private static StringWriter StringWriter => stringWriter ?? (stringWriter = new StringWriter());
 
         /// <summary>
         /// Dumps given gameObject's components and its descendants into a string

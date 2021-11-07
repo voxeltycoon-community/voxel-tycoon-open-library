@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Voxel Tycoon Open Library", "Voxel Tycoon Open Library\Voxel Tycoon Open Library.csproj", "{F94D8BCE-5E87-4A71-9A1E-3DBEEDAB588E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "utils\Utils.csproj", "{7F7DCA8B-83DE-4463-B00F-711B951855CA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VTOL.DevTools", "utils\VTOL.DevTools.csproj", "{7F7DCA8B-83DE-4463-B00F-711B951855CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
