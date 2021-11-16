@@ -21,6 +21,8 @@ jobs:
   build:
     # What is the current Job actually doing.
     name: Build
+    # When should this job be run.
+    if: !contains(github.event.head_commit.message, "[skip cx]")
     # How should it perform its job.
     strategy:
       # A collection of configurations for all jobs.
@@ -124,3 +126,60 @@ jobs:
           path: ${{ matrix.output_path }}
 
   deploy:
+    # What is the current Job actually doing.
+    name: Deploy
+    # Jobs that must be completed before this one.
+    needs: build
+    # When should this job be run.
+    if: startsWith(github.ref, "refs/heads/main")
+    # How should it perform its job.
+    strategy:
+      # A collection of configurations for all jobs.
+      #
+      # When one setting has multiple entries (such as the os containing both
+      # ubuntu-latest and windows-latest) then this will run multiple jobs,
+      # one for each entry (so one on ubuntu and one on windows).
+      matrix:
+        # The system that will compile our project.
+        # This is just for the behind-the-scenes server, it should not
+        # effect the code itself.
+        os:
+          # - "ubuntu-latest"
+          # - "macOS-latest"
+          - "windows-latest"
+        # Specifies the folder where to put the final product in.
+        output_path:
+          - "workshop"
+      # Cancels the whole pipeline if one step fails.
+      fail-fast: true
+    # Where should it perform its job.
+    runs-on: ${{ matrix.os }}
+    # Specifies the maximum amount of time this job may run.
+    timeout-minutes: 5
+
+    # What should this program be doing.
+    steps:
+      # Downloads the completed library build.
+      # https://github.com/marketplace/actions/download-a-build-artifact
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v2.0.10
+        with:
+          # The name of the zip archive which will be downloaded.
+          name: Workshop Content
+          # Path to the folder containing the workshop files.
+          path: ${{ matrix.output_path }}
+      # Uploads the new mod version to steam.
+      # https://github.com/marketplace/actions/steam-workshop-upload
+      - name: Steam Workshop Upload
+        uses: weilbyte/steam-workshop-upload@v1
+        with:
+          # The game's steam app id.
+          appid:  ${{ secret.steam_appid }}
+          # The mod's workshop id.
+          itemid: ${{ secret.workshop_itemid }}
+          # The path to the workshop folder.
+          path:   ${{ matrix.output_path }}
+        env:
+          STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
+          STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
+          STEAM_TFASEED:  ${{ secrets.STEAM_TFASEED }}
