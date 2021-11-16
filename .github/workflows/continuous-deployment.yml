@@ -22,7 +22,7 @@ jobs:
     # What is the current Job actually doing.
     name: Build
     # When should this job be run.
-    if: !contains(github.event.head_commit.message, "[skip cx]")
+    if: ${{ !contains(github.event.head_commit.message, "[skip cx]") }}
     # How should it perform its job.
     strategy:
       # A collection of configurations for all jobs.
