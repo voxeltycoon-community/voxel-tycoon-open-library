@@ -12,43 +12,71 @@ name: Continuous Deployment
 # When should this code be called?
 on:
   push:
-    branches:
-      - master
+    branches: [main, development]
+  pull_request:
+    types: [opened, reopened, synchronize]
 
 # What are all the things this process should do.
 jobs:
-  deploy:
+  build:
     # What is the current Job actually doing.
-    name: Deploy
+    name: Build
     # How should it perform its job.
     strategy:
-      fail-fast: true
+      # A collection of configurations for all jobs.
+      #
+      # When one setting has multiple entries (such as the os containing both
+      # ubuntu-latest and windows-latest) then this will run multiple jobs,
+      # one for each entry (so one on ubuntu and one on windows).
       matrix:
         # The system that will compile our project.
         # This is just for the behind-the-scenes server, it should not
         # effect the code itself.
         os:
-          # - 'ubuntu-latest'
-          # - 'macOS-latest'
-          - 'windows-latest'
-        path:
-          - 'target'
+          # - "ubuntu-latest"
+          # - "macOS-latest"
+          - "windows-latest"
+        # Specifies the folder where the Voxel Tycoon game will be stored in.
+        library_path:
+          - "libs"
+        # Specifies the folder where to put the final product in.
+        output_path:
+          - "workshop"
         # The version of C# which we are building with.
         # This cannot be any version but it needs to be accessible
-        # when using "dotnet --lists-sdks" or be "dotnet --version"
+        # when using "dotnet --list-sdks" or be "dotnet --version"
         csharp:
-          - '5.0.x'
+          - "5.0.x"
+      # Cancels the whole pipeline if one step fails.
+      fail-fast: true
     # Where should it perform its job.
     runs-on: ${{ matrix.os }}
-    # Specifies the maximum amount of time this may run.
+    # Specifies the maximum amount of time this job may run.
     timeout-minutes: 15
+    # Specifies a collection of system environment variables.
+    env:
+      VoxelTycoonInstallationDir: ${{ matrix.library_path }}
+
     # What should this program be doing.
     steps:
-      # Get the current project from master.
+      # Get the current VTOL project from master.
       # https://github.com/marketplace/actions/checkout
-      - name: Checkout Project
+      - name: Checkout - Voxel Tycoon Open Library
         uses: actions/checkout@v2.3.4
         with:
+          # Large File Storage Support
+          lfs: false
+      # Get all the dependency files for building.
+      # https://github.com/marketplace/actions/checkout
+      - name: Checkout - Voxel Tycoon Data
+        uses: actions/checkout@v2.3.4
+        with:
+          # The repository containing the secret .dll files.
+          repository: ${{ secrets.data_repo }}
+          # The token to give the bot access to the external repo.
+          token: ${{ secret.data_token }}
+          # The location to save this repository in.
+          path: ${{ matrix.library_path }}
           # Large File Storage Support
           lfs: false
       # Store relevant information.
@@ -69,18 +97,30 @@ jobs:
       # Build the library
       # Using the command line build tools from .NET
       - name: Build Library
-        run: dotnet build "${{ matrix.path }}" --configuration Release
+        run: dotnet build --configuration Release
       # Tests the library
       # Using the command line build tools from .NET
       - name: Test Library
         id: testRunner
-        run: dotnet test "${{ matrix.path }}"
+        run: dotnet test
       # Submit it test results to show us.
       # https://github.com/marketplace/actions/upload-a-build-artifact
       - name: Upload the test results
         uses: actions/upload-artifact@v2.2.4
         if: failure()
         with:
-          name: Test results
+          name: Test Failures
           # Path of the runner with results.
           path: ${{ steps.testRunner.outputs.artifactsPath }}
+      # Submit the completed build if everything runs as expected.
+      # https://github.com/marketplace/actions/upload-a-build-artifact
+      - name: Upload the build results
+        uses: actions/upload-artifact@v2.2.4
+        if: success()
+        with:
+          # The name of the zip archive which will be published.
+          name: Workshop Content
+          # Path to the folder containing the workshop files.
+          path: ${{ matrix.output_path }}
+
+  deploy:
