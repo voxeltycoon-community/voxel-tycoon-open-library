@@ -58,7 +58,7 @@ jobs:
     timeout-minutes: 15
     # Specifies a collection of system environment variables.
     env:
-      VoxelTycoonInstallationDir: ${{ github.workspace }}\${{ matrix.library_path }}
+      VoxelTycoonInstallationDir: ${{ github.workspace }}/${{ matrix.library_path }}
 
     # What should this program be doing.
     steps:
@@ -80,7 +80,7 @@ jobs:
       - name: Checkout - Voxel Tycoon Data
         uses: actions/checkout@v2.4.0
         with:
-          repository: ${{ secrets.DATA_OWNER }}\${{ secrets.DATA_REPO }}
+          repository: ${{ secrets.DATA_OWNER }}/${{ secrets.DATA_REPO }}
           ref:        ${{ secrets.DATA_BRANCH }}
           token:      ${{ secrets.DATA_TOKEN }}
           path:       ${{ matrix.library_path }}
@@ -89,7 +89,7 @@ jobs:
       # However, the C# projects expect a certain folder name from the game.
       # This will rename the repo folder to our expected one.
       - name: Rename - Voxel Tycoon Data
-        run: rename "${{ matrix.library_path }}\${{ secrets.DATA_REPO }}" "${{ matrix.library_path }}\${{ secrets.DATA_PATH }}"
+        run: rename "${{ matrix.library_path }}/${{ secrets.DATA_REPO }}" "${{ matrix.library_path }}/${{ secrets.DATA_PATH }}"
       # Store relevant information.
       # https://github.com/marketplace/actions/cache
       - name: Cache Relevant Folder
