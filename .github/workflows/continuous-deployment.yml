@@ -89,7 +89,7 @@ jobs:
       # However, the C# projects expect a certain folder name from the game.
       # This will rename the repo folder to our expected one.
       - name: Rename - Voxel Tycoon Data
-        run: rename "${{ matrix.library_path }}/${{ secrets.DATA_REPO }}" "${{ matrix.library_path }}/${{ secrets.DATA_PATH }}"
+        run: rename-item "${{ matrix.library_path }}/${{ secrets.DATA_REPO }}" "${{ matrix.library_path }}/${{ secrets.DATA_PATH }}"
       # Store relevant information.
       # https://github.com/marketplace/actions/cache
       - name: Cache Relevant Folder
