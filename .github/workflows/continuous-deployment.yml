@@ -2,7 +2,8 @@
 # This is the main workflow for continuous deployment of the Voxel Tycoon
 # Open Library (VTOL). This file will compile the code into a .dll,
 # move it into a designated folder and then publish the content of this folder
-# to the Steam Workshop Item.
+# to the Steam Workshop Item. The code itself has been written abstract enough
+# that it can be re-used for any modded game (using Unity).
 #
 # Workflow Contributors: Personal_Builder
 #
