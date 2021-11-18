@@ -58,7 +58,7 @@ jobs:
     timeout-minutes: 15
     # Specifies a collection of system environment variables.
     env:
-      VoxelTycoonInstallationDir: ${{ matrix.library_path }}
+      VoxelTycoonInstallationDir: ${{ github.workspace }}/${{ matrix.library_path }}
 
     # What should this program be doing.
     steps:
@@ -81,10 +81,10 @@ jobs:
         uses: actions/checkout@v2.4.0
         with:
           repository: ${{ secrets.DATA_REPO }}
-          ref: ${{ secrets.DATA_BRANCH }}
-          token: ${{ secrets.DATA_TOKEN }}
-          path: ${{ matrix.library_path }}
-          lfs: false
+          ref:        ${{ secrets.DATA_BRANCH }}
+          token:      ${{ secrets.DATA_TOKEN }}
+          path:       ${{ matrix.library_path }}
+          lfs:        false
       # Store relevant information.
       # https://github.com/marketplace/actions/cache
       - name: Cache Relevant Folder
