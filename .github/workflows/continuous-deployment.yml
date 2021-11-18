@@ -71,16 +71,18 @@ jobs:
           lfs: false
       # Get all the dependency files for building.
       # https://github.com/marketplace/actions/checkout
+      #
+      # repository - The repository containing the secret .dll files.
+      # token - The token to give the bot access to the external repo.
+      # path - The location to save this repository in.
+      # lfs - Large File Storage Support
+      #
       - name: Checkout - Voxel Tycoon Data
         uses: actions/checkout@v2.4.0
         with:
-          # The repository containing the secret .dll files.
           repository: ${{ secrets.DATA_REPO }}
-          # The token to give the bot access to the external repo.
           token: ${{ secrets.DATA_TOKEN }}
-          # The location to save this repository in.
           path: ${{ matrix.library_path }}
-          # Large File Storage Support
           lfs: false
       # Store relevant information.
       # https://github.com/marketplace/actions/cache
