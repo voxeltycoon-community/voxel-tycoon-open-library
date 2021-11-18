@@ -58,7 +58,7 @@ jobs:
     timeout-minutes: 15
     # Specifies a collection of system environment variables.
     env:
-      VoxelTycoonInstallationDir: ${{ matrix.library_path }}
+      VoxelTycoonInstallationDir: ${{ github.workspace }}/${{ matrix.library_path }}
 
     # What should this program be doing.
     steps:
