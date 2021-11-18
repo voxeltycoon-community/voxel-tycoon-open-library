@@ -81,6 +81,7 @@ jobs:
         uses: actions/checkout@v2.4.0
         with:
           repository: ${{ secrets.DATA_REPO }}
+          ref: ${{ secrets.DATA_BRANCH }}
           token: ${{ secrets.DATA_TOKEN }}
           path: ${{ matrix.library_path }}
           lfs: false
