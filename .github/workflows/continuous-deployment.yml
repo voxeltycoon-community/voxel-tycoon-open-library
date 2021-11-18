@@ -65,19 +65,19 @@ jobs:
       # Get the current VTOL project from master.
       # https://github.com/marketplace/actions/checkout
       - name: Checkout - Voxel Tycoon Open Library
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.4.0
         with:
           # Large File Storage Support
           lfs: false
       # Get all the dependency files for building.
       # https://github.com/marketplace/actions/checkout
       - name: Checkout - Voxel Tycoon Data
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.4.0
         with:
           # The repository containing the secret .dll files.
-          repository: ${{ secrets.data_repo }}
+          repository: ${{ secrets.DATA_REPO }}
           # The token to give the bot access to the external repo.
-          token: ${{ secrets.data_token }}
+          token: ${{ secrets.DATA_TOKEN }}
           # The location to save this repository in.
           path: ${{ matrix.library_path }}
           # Large File Storage Support
@@ -175,12 +175,12 @@ jobs:
         uses: weilbyte/steam-workshop-upload@v1
         with:
           # The game's steam app id.
-          appid:  ${{ secrets.steam_gameid }}
+          appid:  ${{ secrets.STEAM_GAMEID }}
           # The mod's workshop id.
-          itemid: ${{ secrets.steam_workshopid }}
+          itemid: ${{ secrets.STEAM_WORKSHOPID }}
           # The path to the workshop folder.
           path:   ${{ matrix.output_path }}
         env:
-          STEAM_USERNAME: ${{ secrets.steam_username }}
-          STEAM_PASSWORD: ${{ secrets.steam_password }}
-          STEAM_TFASEED:  ${{ secrets.steam_tfaseed }}
+          STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
+          STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
+          STEAM_TFASEED:  ${{ secrets.STEAM_TFASEED }}
