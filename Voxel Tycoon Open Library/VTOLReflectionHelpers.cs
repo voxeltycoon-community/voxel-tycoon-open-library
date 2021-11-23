@@ -27,7 +27,8 @@ namespace VTOL
                 throw new ArgumentNullException(nameof(propertyName));
             }
 
-            if (property.PropertyType.IsAssignableFrom(typeof(T)))
+            // IsAssignableFrom returns true when the type is a subclass or the same class
+            if (!property.PropertyType.IsAssignableFrom(typeof(T)))
             {
                 throw new ArgumentException($"{value} is not of type {property.PropertyType}.");
             }

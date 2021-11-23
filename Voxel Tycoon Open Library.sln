@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Voxel Tycoon Open Library", "Voxel Tycoon Open Library\Voxel Tycoon Open Library.csproj", "{F94D8BCE-5E87-4A71-9A1E-3DBEEDAB588E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Voxel Tycoon Open Library", "Voxel Tycoon Open Library\Voxel Tycoon Open Library.csproj", "{F94D8BCE-5E87-4A71-9A1E-3DBEEDAB588E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VTOL.DevTools", "utils\VTOL.DevTools.csproj", "{7F7DCA8B-83DE-4463-B00F-711B951855CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VTOL.DevTools", "utils\VTOL.DevTools.csproj", "{7F7DCA8B-83DE-4463-B00F-711B951855CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VTOL.Tests", "tests\VTOL.Tests\VTOL.Tests.csproj", "{3F5B5F85-7B8A-474C-9CAB-53E3E7697A45}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,6 +21,10 @@ Global
 		{F94D8BCE-5E87-4A71-9A1E-3DBEEDAB588E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7F7DCA8B-83DE-4463-B00F-711B951855CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7F7DCA8B-83DE-4463-B00F-711B951855CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F5B5F85-7B8A-474C-9CAB-53E3E7697A45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F5B5F85-7B8A-474C-9CAB-53E3E7697A45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F5B5F85-7B8A-474C-9CAB-53E3E7697A45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F5B5F85-7B8A-474C-9CAB-53E3E7697A45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
