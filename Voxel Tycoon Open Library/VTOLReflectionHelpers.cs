@@ -16,6 +16,8 @@ namespace VTOL
         /// <param name="obj">The object holding the property.</param>
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value the property should be set to.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="propertyName"/> does not exist.</exception>
+        /// <exception cref="ArgumentException">If value is not an instance of the property type.</exception>
         public static void SetReadOnlyProperty<T>([NotNull] this object obj, [NotNull] string propertyName, T value)
         {
             PropertyInfo property = obj.GetType().GetProperty(propertyName);
