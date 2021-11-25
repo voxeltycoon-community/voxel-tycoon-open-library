@@ -10,7 +10,7 @@ namespace VTOL
     public static class VTOLReflectionHelpers
     {
         /// <summary>
-        /// Allows for setting a property which has a private set accessor.
+        /// Allows for setting a property which has a <code>private set;</code>-accessor.
         /// </summary>
         /// <typeparam name="T">Type of the property.</typeparam>
         /// <param name="obj">The object holding the property.</param>
@@ -20,6 +20,11 @@ namespace VTOL
         /// <exception cref="ArgumentException">If value is not an instance of the property type.</exception>
         public static void SetReadOnlyProperty<T>([NotNull] this object obj, [NotNull] string propertyName, T value)
         {
+            if (obj == null)
+            {
+                throw new ArgumentNullException(nameof(obj));
+            }
+            
             PropertyInfo property = obj.GetType().GetProperty(propertyName);
 
             if (property == null)
