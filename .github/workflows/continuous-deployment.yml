@@ -103,11 +103,13 @@ jobs:
       # Build the library
       # Using the command line build tools from .NET
       - name: Build Library
+        shell: bash
         run: dotnet build --configuration Release
       # Tests the library
       # Using the command line build tools from .NET
       - name: Test Library
         id: testRunner
+        shell: bash
         run: dotnet test
       # Submit it test results to show us.
       # https://github.com/marketplace/actions/upload-a-build-artifact
