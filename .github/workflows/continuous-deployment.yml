@@ -150,9 +150,10 @@ jobs:
         # This is just for the behind-the-scenes server, it should not
         # effect the code itself.
         os:
-          # - "ubuntu-latest"
+          # Steam Deployment only works on Linux devices.
+          - "ubuntu-latest"
           # - "macOS-latest"
-          - "windows-latest"
+          # - "windows-latest"
         # Specifies the folder where to put the final product in.
         output_path:
           - "workshop"
