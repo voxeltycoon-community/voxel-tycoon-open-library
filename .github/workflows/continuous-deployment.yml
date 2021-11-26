@@ -120,7 +120,7 @@ jobs:
           path: ${{ steps.testRunner.outputs.artifactsPath }}
       # Submit the completed build if everything runs as expected.
       # https://github.com/marketplace/actions/upload-a-build-artifact
-      - name: Upload the build results
+      - name: Upload Workshop Data
         uses: actions/upload-artifact@v2.2.4
         if: success()
         with:
