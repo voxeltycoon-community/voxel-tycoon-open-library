@@ -2,7 +2,8 @@
 using JetBrains.Annotations;
 using VoxelTycoon.Modding;
 
-namespace VTOL {
+namespace VTOL 
+{
 
 	/// <summary>
 	/// The main library entry point.
