@@ -11,25 +11,41 @@ namespace VTOL
         [Test]
         public void SetReadOnlyProperty_ThrowsException_WithNoObject()
         {
+            //Arrange
             SubClassA subClass = null;
 
+            //Assert
             Assert.Catch<ArgumentNullException>(() => subClass.SetReadOnlyProperty("MyInteger", 10));
         }
 
         [Test]
         public void SetReadOnlyProperty_ThrowsException_WithNoPropertyName()
         {
+            //Arrange
             SubClassA subClass = new SubClassA();
 
+            //Assert
             Assert.Catch<ArgumentNullException>(() => subClass.SetReadOnlyProperty(null, 10));
         }
 
         [Test]
         public void SetReadOnlyProperty_ThrowsException_PropertyIsNotAssignable()
         {
+            //Arrange
             SubClassA subClass = new SubClassA();
 
+            //Assert
             Assert.Catch<ArgumentException>(() => subClass.SetReadOnlyProperty("MyInteger", "myString"));
+        }
+
+        [Test]
+        public void SetReadOnlyPropertyWithSubClassHidingProperty_ThrowsException_WithNoSetAccessor()
+        {
+            //Arrange
+            SubClassB subClass = new SubClassB();
+
+            //Assert
+            Assert.Catch<ArgumentNullException>(() => subClass.SetReadOnlyProperty("MyInteger", 10));
         }
 
         [Test]
@@ -38,21 +54,6 @@ namespace VTOL
             //Arrange
             int expected = 10;
             SubClassA subClass = new SubClassA();
-
-            //Act
-            subClass.SetReadOnlyProperty("MyInteger", expected);
-            int actual = subClass.MyInteger;
-
-            //Assert
-            Assert.AreEqual(expected, actual);
-        }
-
-        [Test]
-        public void SetReadOnlyProperty_SetValueWhereSubClassHidesBaseVariable_WithGivenValue()
-        {
-            //Arrange
-            int expected = 10;
-            SubClassB subClass = new SubClassB();
 
             //Act
             subClass.SetReadOnlyProperty("MyInteger", expected);
@@ -83,7 +84,7 @@ namespace VTOL
         /// </summary>
         private class SubClassB : ParentClass
         {
-            public new int MyInteger { get; private set; }
+            public new int MyInteger { get; }
         }
     }
 }

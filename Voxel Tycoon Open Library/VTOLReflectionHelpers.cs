@@ -39,7 +39,14 @@ namespace VTOL
             }
 
             property = property.DeclaringType.GetProperty(propertyName);
-            property.GetSetMethod(true).Invoke(obj, new object[] { value });
+            MethodInfo setMethod = property.GetSetMethod(true);
+
+            if (setMethod == null)
+            {
+                throw new ArgumentNullException(nameof(setMethod));
+            }
+
+            setMethod.Invoke(obj, new object[] { value });
         }
     }
 }
