@@ -8,6 +8,9 @@
 ## These will help clean up the workshop content and repo structure.
 ##
 
+# Hide the mod.json file as this contains data only required to publish
+# the mod using the VT mod publisher, while we use the steam one internally.
+workshop/mod.json
 # Hide all dlls as they will automatically be placed in the workshop folder
 # when building our application using Visual Studio.
 workshop/*.dll
