@@ -135,7 +135,7 @@ jobs:
     # Jobs that must be completed before this one.
     needs: build
     # When should this job be run.
-    if: "startsWith(github.ref, 'refs/heads/main')"
+    # if: "startsWith(github.ref, 'refs/heads/main')"
     # How should it perform its job.
     strategy:
       # A collection of configurations for all jobs.
