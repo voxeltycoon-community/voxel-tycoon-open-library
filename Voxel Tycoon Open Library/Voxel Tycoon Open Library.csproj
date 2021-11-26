@@ -21,6 +21,12 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Include="..\LICENSE">
       <Pack>True</Pack>
@@ -31,18 +37,23 @@
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\0Harmony.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule">
       <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
       <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+      <Private>false</Private>
     </Reference>
   </ItemGroup>
 
