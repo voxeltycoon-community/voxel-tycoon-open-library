@@ -59,7 +59,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command=":: Visual Studio builds an extra `.deps.json` file for our depencies.&#xD;&#xA;:: However, we won't be using it in our mod, so we remove it.&#xD;&#xA;:: &#xD;&#xA;:: /q - Removes confirmation prompt when deleting files.&#xD;&#xA;del &quot;$(TargetDir)*.deps.json&quot; /q&#xD;&#xA;&#xD;&#xA;:: Next up we need  to copy all relevant files to our workshop.&#xD;&#xA;:: This will mostly be all our dlls and possible resource files.&#xD;&#xA;::&#xD;&#xA;:: /d - Only overwrite files if they are newer.&#xD;&#xA;:: /i - Create the destination if it does not exist.&#xD;&#xA;:: /s - Also copy subdirectories within the source.&#xD;&#xA;:: /y - Overwrites existing files in the destination directory.&#xD;&#xA;xcopy &quot;$(TargetDir)*.dll&quot; &quot;$(SolutionDir)workshop\&quot; /d /i /s /y" />
+    <Exec Command=":: Visual Studio builds an extra `.deps.json` file for our depencies.&#xD;&#xA;:: However, we won't be using it in our mod, so we remove it.&#xD;&#xA;:: &#xD;&#xA;:: /q - Removes confirmation prompt when deleting files.&#xD;&#xA;del &quot;$(TargetDir)*.deps.json&quot; /q&#xD;&#xA;&#xD;&#xA;:: Next up we need  to copy all relevant files to our workshop.&#xD;&#xA;:: This will mostly be all our dlls and possible resource files.&#xD;&#xA;::&#xD;&#xA;:: /d - Only overwrite files if they are newer.&#xD;&#xA;:: /i - Create the destination if it does not exist.&#xD;&#xA;:: /s - Also copy subdirectories within the source.&#xD;&#xA;:: /y - Overwrites existing files in the destination directory.&#xD;&#xA;xcopy &quot;$(TargetDir)*.*&quot; &quot;$(SolutionDir)workshop\&quot; /d /i /s /y" />
   </Target>
 
 </Project>
