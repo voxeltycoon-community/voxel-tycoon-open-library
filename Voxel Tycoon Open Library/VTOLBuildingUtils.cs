@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 using VoxelTycoon;
 using VoxelTycoon.Buildings;
 using VoxelTycoon.Game;
+using VoxelTycoon.Tools.Remover.Handlers;
 
 namespace VTOL
 {
@@ -69,6 +71,38 @@ namespace VTOL
             }
 
             return buildings.ToArray();
+        }
+    }
+    /// <summary>
+    /// Can be overriden to allow the user to change whether the user is allowed to remove building using the buldozer tool.
+    /// </summary>
+    /// <typeparam name="TBuilding">Type of building to overide.</typeparam>
+    public class VTOLBuildingRemoverHandler<TBuilding> : BuildingRemoverHandler<TBuilding> where TBuilding : Building
+    {
+        /// <summary>
+        /// NOT to be overriden.
+        /// this overides the base game - honestly I am not entirely sure why this isn't already in the game.
+        /// </summary>
+        [UsedImplicitly]
+        public override bool Match(Component target)
+        {
+            return target is TBuilding;
+        }
+        /// <summary>
+        /// Can be overriden to allow the user to change whether the user is allowed to remove the building type useing the buldozer tool.
+        /// </summary>
+        [UsedImplicitly]
+        protected override bool CanRemoveInternal(List<TBuilding> targets, out string reason)
+        {
+            return base.CanRemoveInternal(targets, out reason);
+        }
+        /// <summary>
+        /// Can be overriden to allow the user to change whether the game needs to confirm deletion using the buldozer tool.
+        /// </summary>
+        [UsedImplicitly]
+        protected override bool RequiresConfirmationInternal(TBuilding target, out string confirmationMessage)
+        {
+            return base.RequiresConfirmationInternal(target, out confirmationMessage);
         }
     }
 }
