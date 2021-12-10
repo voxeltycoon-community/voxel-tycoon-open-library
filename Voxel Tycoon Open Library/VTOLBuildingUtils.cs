@@ -10,7 +10,7 @@ namespace VTOL
     /// <summary>
     /// Class with utility methods concerning buildings in Voxel Tycoon
     /// </summary>
-    public static class VTOLBuilding
+    public static class VTOLBuildingUtils
     {
         /// <summary>
         /// Attempts to find a building at the cursor position.
