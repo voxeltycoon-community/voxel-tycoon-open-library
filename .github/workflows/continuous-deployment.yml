@@ -1,0 +1,207 @@
+#
+# This is the main workflow for continuous deployment of the Voxel Tycoon
+# Open Library (VTOL). This file will compile the code into a .dll, move it into
+# a designated folder ( {{ output_path }} ) and then publish the content of
+# this folder to the Steam Workshop Item. The code itself has been written
+# abstract enough that it can be re-used for any modded game (using Unity).
+#
+# Workflow Contributors: Personal_Builder
+#
+
+name: Continuous Deployment
+
+# When should this code be called?
+on:
+  push:
+    branches: [main, development]
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+# What are all the things this process should do.
+jobs:
+  ##############################
+  #                            #
+  # Compile & Test the Project #
+  #                            #
+  ##############################
+  build:
+    # What is the current Job actually doing.
+    name: Build
+    # When should this job be run.
+    if: "!contains(github.event.head_commit.message, '[skip cx]')"
+    # How should it perform its job.
+    strategy:
+      # A collection of configurations for all jobs.
+      #
+      # When one setting has multiple entries (such as the os containing both
+      # ubuntu-latest and windows-latest) then this will run multiple jobs,
+      # one for each entry (so one on ubuntu and one on windows).
+      matrix:
+        # The system that will compile our project.
+        # This is just for the behind-the-scenes server, it should not
+        # effect the code itself.
+        os:
+          # - "ubuntu-latest"
+          # - "macOS-latest"
+          - "windows-latest"
+        # Specifies the folder where the Voxel Tycoon game will be stored in.
+        library_path:
+          - "libs"
+        # Specifies the folder where to put the final product in.
+        output_path:
+          - "workshop"
+        # The version of C# which we are building with.
+        # This cannot be any version but it needs to be accessible
+        # when using "dotnet --list-sdks" or be "dotnet --version"
+        csharp:
+          - "5.0.x"
+      # Cancels the whole pipeline if one step fails.
+      fail-fast: true
+    # Where should it perform its job.
+    runs-on: ${{ matrix.os }}
+    # Specifies the maximum amount of time this job may run.
+    timeout-minutes: 15
+    # Specifies a collection of system environment variables.
+    env:
+      VoxelTycoonInstallationDir: ${{ github.workspace }}/${{ matrix.library_path }}
+
+    # What should this program be doing.
+    steps:
+      # Get the current VTOL project from master.
+      # https://github.com/marketplace/actions/checkout
+      - name: Checkout - Voxel Tycoon Open Library
+        uses: actions/checkout@v2.4.0
+        with:
+          # Large File Storage Support
+          lfs: false
+      # Get all the dependency files for building from a remote repository.
+      # https://github.com/marketplace/actions/checkout
+      #
+      # repository - The repository containing the secret .dll files
+      #              which the source code depends on.
+      # token - The token to give the bot access to the external repo.
+      # path  - The local location to save the remote repository in.
+      # lfs   - Large File Storage Support
+      #
+      - name: Checkout - Voxel Tycoon Data
+        uses: actions/checkout@v2.4.0
+        with:
+          repository: ${{ secrets.DATA_REPO }}
+          ref:        ${{ secrets.DATA_BRANCH }}
+          token:      ${{ secrets.DATA_TOKEN }}
+          path:       ${{ matrix.library_path }}/${{ secrets.DATA_PATH }}
+          lfs:        false
+      # Store relevant information.
+      # https://github.com/marketplace/actions/cache
+      - name: Cache Relevant Folder
+        uses: actions/cache@v2.1.6
+        with:
+          path: ${{ github.workspace }}/.nuget/packages
+          key:  ${{ matrix.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ matrix.os }}-nuget-
+      # Install C-Sharp
+      # https://github.com/marketplace/actions/setup-net-core-sdk
+      #
+      # dotnet-version - The C# SDK version which will be installed.
+      #
+      - name: Install C-sharp
+        uses: actions/setup-dotnet@v1.8.2
+        with:
+          dotnet-version: ${{ matrix.csharp }}
+      # Build the library
+      # Using the command line build tools from .NET
+      - name: Build Library
+        shell: bash
+        run: dotnet build --configuration Release
+      # Tests the library
+      # Using the command line build tools from .NET
+      - name: Test Library
+        id: testRunner
+        shell: bash
+        run: dotnet test
+      # Submit it test results to show us.
+      # https://github.com/marketplace/actions/upload-a-build-artifact
+      - name: Upload the test results
+        uses: actions/upload-artifact@v2.2.4
+        if: failure()
+        with:
+          name: Test Failures
+          # Path of the runner with results.
+          path: ${{ steps.testRunner.outputs.artifactsPath }}
+      # Submit the completed build if everything runs as expected.
+      # https://github.com/marketplace/actions/upload-a-build-artifact
+      - name: Upload Workshop Data
+        uses: actions/upload-artifact@v2.2.4
+        if: success()
+        with:
+          # The name of the zip archive which will be published.
+          name: Workshop Content
+          # Path to the folder containing the workshop files.
+          path: ${{ matrix.output_path }}
+
+  ##############################
+  #                            #
+  # Deploy / Publish to Steam  #
+  #                            #
+  ##############################
+  deploy:
+    # What is the current Job actually doing.
+    name: Deploy
+    # Jobs that must be completed before this one.
+    needs: build
+    # When should this job be run.
+    if: "startsWith(github.ref, 'refs/heads/main')"
+    # How should it perform its job.
+    strategy:
+      # A collection of configurations for all jobs.
+      #
+      # When one setting has multiple entries (such as the os containing both
+      # ubuntu-latest and windows-latest) then this will run multiple jobs,
+      # one for each entry (so one on ubuntu and one on windows).
+      matrix:
+        # The system that will compile our project.
+        # This is just for the behind-the-scenes server, it should not
+        # effect the code itself.
+        os:
+          # Steam Deployment only works on Linux devices.
+          - "ubuntu-latest"
+          # - "macOS-latest"
+          # - "windows-latest"
+        # Specifies the folder where to put the final product in.
+        output_path:
+          - "workshop"
+      # Cancels the whole pipeline if one step fails.
+      fail-fast: true
+    # Where should it perform its job.
+    runs-on: ${{ matrix.os }}
+    # Specifies the maximum amount of time this job may run.
+    timeout-minutes: 5
+
+    # What should this program be doing.
+    steps:
+      # Downloads the completed library build.
+      # https://github.com/marketplace/actions/download-a-build-artifact
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v2.0.10
+        with:
+          # The name of the zip archive which will be downloaded.
+          name: Workshop Content
+          # Path to the folder containing the workshop files.
+          path: ${{ matrix.output_path }}
+      # Uploads the new mod version to steam.
+      # https://github.com/marketplace/actions/steam-workshop-upload
+      #
+      # appid  - The game's steam app id.
+      # itemid - The mod's workshop id.
+      # path   - The path to the workshop folder.
+      - name: Steam Workshop Upload
+        uses: weilbyte/steam-workshop-upload@v1
+        with:
+          appid:  ${{ secrets.STEAM_GAMEID }}
+          itemid: ${{ secrets.STEAM_WORKSHOPID }}
+          path:   ${{ matrix.output_path }}
+        env:
+          STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
+          STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
+          # STEAM_TFASEED:  ${{ secrets.STEAM_TFASEED }}
