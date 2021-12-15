@@ -1,11 +1,13 @@
-﻿using JetBrains.Annotations;
+﻿using HarmonyLib;
+using JetBrains.Annotations;
 using System;
 using System.Reflection;
 
 namespace VTOL
 {
     /// <summary>
-    /// Class with methods to help with reflection 
+    /// Class with methods to help with reflection.
+    /// Should be used with care.
     /// </summary>
     public static class VTOLReflectionHelpers
     {
@@ -24,12 +26,17 @@ namespace VTOL
             {
                 throw new ArgumentNullException(nameof(obj));
             }
+
+            if (propertyName == null)
+            {
+                throw new ArgumentNullException(nameof(propertyName));
+            }
             
             PropertyInfo property = obj.GetType().GetProperty(propertyName);
 
             if (property == null)
             {
-                throw new ArgumentNullException(nameof(propertyName));
+                throw new ArgumentException($"{nameof(propertyName)} does not exist.");
             }
 
             // IsAssignableFrom returns true when the type is a subclass or the same class
@@ -47,6 +54,35 @@ namespace VTOL
             }
 
             setMethod.Invoke(obj, new object[] { value });
+        }
+
+        /// <summary>
+        /// Allows for setting a private field
+        /// </summary>
+        /// <typeparam name="T">Type of the field.</typeparam>
+        /// <param name="obj">The object holding the field.</param>
+        /// <param name="fieldName">Name of the field.</param>
+        /// <param name="value">The value the field should be set to.</param>
+        public static void SetPrivateField<T>([NotNull] this object obj, [NotNull] string fieldName, T value)
+        {
+            if (obj == null)
+            {
+                throw new ArgumentNullException(nameof(obj));
+            }
+
+            Traverse.Create(obj).Field(fieldName).SetValue(value);
+        }
+
+        /// <summary>
+        /// Allows for getting a value from a private field.
+        /// </summary>
+        /// <typeparam name="T">Type of the field.</typeparam>
+        /// <param name="obj">The object holding the field.</param>
+        /// <param name="fieldName">Name of the field.</param>
+        /// <returns>Value of field.</returns>
+        public static T GetPrivateField<T>([NotNull] this object obj, [NotNull] string fieldName)
+        {
+            return (T)Traverse.Create(obj).Field(fieldName).GetValue();
         }
     }
 }
