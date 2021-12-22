@@ -123,7 +123,7 @@ jobs:
       - name: Test Library
         id: testRunner
         shell: bash
-        run: dotnet test --results-directory ${{ matrix.test_results_path }}
+        run: dotnet test --logger trx --results-directory ${{ matrix.test_results_path }}
       # Submit it test results to show us.
       # https://github.com/marketplace/actions/upload-a-build-artifact
       - name: Upload the test results
