@@ -14,8 +14,6 @@ namespace VTOL
             //Arrange
             SubClassA subClass = null;
 
-			Assert.Fail();
-
             //Assert
             Assert.Catch<ArgumentNullException>(() => subClass.SetReadOnlyProperty("MyInteger", 10));
         }
