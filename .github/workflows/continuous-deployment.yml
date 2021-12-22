@@ -47,6 +47,10 @@ jobs:
         # Specifies the folder where the Voxel Tycoon game will be stored in.
         library_path:
           - "libs"
+        # Specifies the folder where test reports and statistics will be stored.
+        # This folder will only be used when the tests fail.
+        test_results_path:
+          - "test_results"
         # Specifies the folder where to put the final product in.
         output_path:
           - "workshop"
@@ -119,7 +123,7 @@ jobs:
       - name: Test Library
         id: testRunner
         shell: bash
-        run: dotnet test
+        run: dotnet test --logger trx --results-directory ${{ matrix.test_results_path }}
       # Submit it test results to show us.
       # https://github.com/marketplace/actions/upload-a-build-artifact
       - name: Upload the test results
@@ -128,7 +132,7 @@ jobs:
         with:
           name: Test Failures
           # Path of the runner with results.
-          path: ${{ steps.testRunner.outputs.artifactsPath }}
+          path: ${{ matrix.test_results_path }}
       # Submit the completed build if everything runs as expected.
       # https://github.com/marketplace/actions/upload-a-build-artifact
       - name: Upload Workshop Data
