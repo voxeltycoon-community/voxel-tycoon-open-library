@@ -28,6 +28,7 @@ namespace VTOL
         }
 
         public IEnumerable<Connection> Connections => _connections;
+        internal List<StorageBuildingSibling> AddedConnections => _addedConnections;
 
         /// <summary>
         /// Create a connection with a building not detected by the by the base game detection.

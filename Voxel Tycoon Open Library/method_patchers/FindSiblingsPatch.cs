@@ -26,9 +26,9 @@ namespace VTOL
                 List<StorageBuildingSibling> approvedConnections = new List<StorageBuildingSibling>(connections.RemoveCanceled());
 
                 findSiblingsResult.Clear();
-                findSiblingsResult.Capacity = approvedConnections.Count + connections.CustomConnections.Count;
+                findSiblingsResult.Capacity = approvedConnections.Count + connections.AddedConnections.Count;
                 findSiblingsResult.AddRange(approvedConnections);
-                findSiblingsResult.AddRange(connections.CustomConnections);
+                findSiblingsResult.AddRange(connections.AddedConnections);
             }
         }
     }

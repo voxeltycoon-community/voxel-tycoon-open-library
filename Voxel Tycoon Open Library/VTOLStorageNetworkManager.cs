@@ -15,7 +15,7 @@ namespace VTOL
         private bool _isDirty;
 
         /// <summary>
-        /// Registers a method which decides if a connection between to Storage Network Buildings should be allowed or not.
+        /// Registers a method which decides if a connection between two Storage Network Buildings should be allowed or not.
         /// </summary>
         /// <param name="assetId">The AssetId of one of the StorageNetworkBuildings which is part of the connection to be adjusted.</param>
         /// <param name="listener">The method which decides if a connection should be allowed.</param>
