@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace VTOL
+﻿namespace VTOL 
 {
-    public enum GameStates
-    {
-        OnModsInitialized,
-        Initialize,
-        OnGameStarting,
-        OnGameStarted,
-        OnDeinitialize
-    }
+	/// <summary>
+	/// These are the states used in <see cref="VoxelTycoon.Modding.Mod"/>. The states discribe in which part of the life cycle the game currently is.
+	/// VTOL is automatically updating these states in <see cref="VTOL.GameState"/>. When certain operations need to happen in a specific state, this can be used to check the current state.
+	/// </summary>
+	public enum GameStates
+	{
+		Initialize,
+		OnModsInitialized,
+		OnGameStarting,
+		OnGameStarted,
+		OnDeinitialize
+	}
 }

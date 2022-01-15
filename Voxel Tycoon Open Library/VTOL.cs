@@ -4,7 +4,6 @@ using VoxelTycoon.Modding;
 
 namespace VTOL 
 {
-
 	/// <summary>
 	/// The main library entry point.
 	/// </summary>
@@ -12,31 +11,36 @@ namespace VTOL
 	public class VTOL : Mod
 	{
 		private Harmony _harmony;
-		private const string HarmonyID = "vtol.patch";
+		private const string _harmonyID = "vtol.patch";
 
+		/// <summary>
+		/// The GameState Voxel Tycoon is currently in.
+		/// </summary>
+		/// <remarks>The game states are based on the virtual methods provided in <see cref="VoxelTycoon.Modding.Mod"/>.</remarks>
 		public static GameStates GameState { get; private set; }
 
 		/// <summary>
-		/// Method called on mod initialization
+		/// Method called when this mod is being registered. This is before all mods are available.
 		/// </summary>
-		protected override void OnModsInitialized()
-        {
-			GameState = GameStates.OnModsInitialized;
-        }
-		
-		/// <summary>
-		/// Method called on mod initialization (while loading a save)
-		/// </summary>
-		protected override void Initialize()
+		protected override void Initialize() 
 		{
 			GameState = GameStates.Initialize;
-			
-			_harmony = new Harmony(HarmonyID);
+
+			_harmony = new Harmony(_harmonyID);
 			_harmony.PatchAll();
 		}
 
 		/// <summary>
-		/// Method called on game starting
+		/// Method called when all mods are registered.
+		/// From here you can access other mods.
+		/// </summary>
+		protected override void OnModsInitialized()
+		{
+			GameState = GameStates.OnModsInitialized;
+		}
+
+		/// <summary>
+		/// Method called before the save or new game is being loaded/generated.
 		/// </summary>
 		protected override void OnGameStarting()
 		{
@@ -44,10 +48,10 @@ namespace VTOL
 		}
 
 		/// <summary>
-		/// Method called when the process of starting and loading the game has been finished
+		/// Method called after the save or new game has been loaded/generated.
 		/// </summary>
 		protected override void OnGameStarted()
-        {
+		{
 			GameState = GameStates.OnGameStarted;
 		}
 
@@ -58,9 +62,8 @@ namespace VTOL
 		{
 			GameState = GameStates.OnDeinitialize;
 			
-			_harmony.UnpatchAll(HarmonyID);
+			_harmony.UnpatchAll(_harmonyID);
 			_harmony = null;
 		}
 	}
-
 }
