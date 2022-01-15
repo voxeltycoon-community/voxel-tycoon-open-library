@@ -5,7 +5,7 @@ using VoxelTycoon;
 using VoxelTycoon.Buildings;
 using VoxelTycoon.Game;
 
-namespace VTOL
+namespace VTOL.Buildings
 {
     /// <summary>
     /// Class with utility methods concerning buildings in Voxel Tycoon
