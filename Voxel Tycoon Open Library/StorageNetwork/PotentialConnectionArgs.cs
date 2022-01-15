@@ -1,41 +1,42 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using UnityEngine;
 using VoxelTycoon.Buildings;
 
-namespace VTOL
+namespace VTOL.StorageNetwork
 {
     /// <summary>
-    /// This class is used to collect all the Siblings found by <code>VoxelTycoon.Buildings.StorageBuildingManager.FindSiblings()</code>
-    /// and allow them to be removed based on specified conditions.
+    /// This class is used to collect all the Siblings found by <see cref="VoxelTycoon.Buildings.StorageBuildingManager.FindSiblings(StorageNetworkBuilding)"/>
+    /// and allows them to be removed based on specified conditions.
     /// </summary>
     public class PotentialConnectionArgs
     {
-        private readonly List<StorageBuildingSibling> _siblings = new List<StorageBuildingSibling>();
+        private readonly List<StorageBuildingSibling> _siblings;
         private readonly List<StorageBuildingSibling> _addedConnections = new List<StorageBuildingSibling>();
-        private readonly List<Connection> _connections;
+        private readonly List<PotentialConnection> _connections;
         private HashSet<int> _buildingIds;
 
         internal PotentialConnectionArgs(List<StorageBuildingSibling> siblings)
         {
             _siblings = siblings;
-            _connections = new List<Connection>(_siblings.Count);
+            _connections = new List<PotentialConnection>(_siblings.Count);
 
             foreach (StorageBuildingSibling sibling in _siblings)
             {
-                _connections.Add(new Connection(sibling.Building));
+                _connections.Add(new PotentialConnection(sibling.Building));
             }
         }
 
-        public IEnumerable<Connection> Connections => _connections;
+        public IEnumerable<PotentialConnection> Connections => _connections;
         internal List<StorageBuildingSibling> AddedConnections => _addedConnections;
 
         /// <summary>
-        /// Create a connection with a building not detected by the by the base game detection.
+        /// Create a connection with a building not detected by the base game detection.
         /// </summary>
-        /// <param name="storageBuildingSibling">The <code>StorageBuildingSibling</code> containing the information to create a connection.</param>
-        /// <remarks>The normal detection is done by <code>VoxelTycoon.Buildings.StorageBuildingManager.FindSiblings()</code>.</remarks>
-        /// <remarks>A <code>StorageBuildingSibling</code> can be created with <code>VTOLStorageNetworkUtils.CreateStorageBuildingSibling()</code>.</remarks>
+        /// <param name="storageBuildingSibling">The <see cref="StorageBuildingSibling"/> containing the information to create a connection.</param>
+        /// <remarks>The normal detection is done by <see cref="StorageBuildingManager.FindSiblings(StorageNetworkBuilding)"/>.
+        /// A <see cref="StorageBuildingSibling"/> can be created with <see cref="StorageNetworkUtils.CreateSiblingOfBuilding(StorageNetworkBuilding, StorageNetworkBuilding, bool)"/>.</remarks>
         public void AddConnection(StorageBuildingSibling storageBuildingSibling)
         {
             RegisterBuildingIds();
@@ -54,12 +55,12 @@ namespace VTOL
         /// <summary>
         /// Removes all the StorageBuildingSiblings that have been canceled.
         /// </summary>
-        /// <returns>Returns a list with the remaining StorageBuildingSiblings.</returns>
+        /// <returns>Returns a list with the StorageBuildingSiblings which are not canceled.</returns>
         internal List<StorageBuildingSibling> RemoveCanceled()
         {
             if (_connections.Count != _siblings.Count)
             {
-                throw new ArgumentException();
+                Debug.Assert(_connections.Count == _siblings.Count);
             }
 
             for (int i = _connections.Count - 1; i >= 0; i--)
@@ -68,7 +69,7 @@ namespace VTOL
                 {
                     if (_connections[i].Building.Id != _siblings[i].Building.Id)
                     {
-                        throw new ArgumentException();
+                        Trace.Assert(_connections[i].Building.Id == _siblings[i].Building.Id);
                     }
 
                     _siblings.RemoveAt(i);
@@ -92,17 +93,5 @@ namespace VTOL
         }
     }
 
-    /// <summary>
-    /// Class used by <code>PotentialConnectionArgs</code> to store each building detected, combined with if it will be canceled or not.
-    /// </summary>
-    public class Connection
-    {
-        internal Connection(StorageNetworkBuilding building)
-        {
-            Building = building;
-        }
-
-        public bool IsCanceled { get; set;}
-        public StorageNetworkBuilding Building { get; private set; }
-    }
+    
 }

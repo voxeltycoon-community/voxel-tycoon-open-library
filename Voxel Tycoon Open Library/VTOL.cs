@@ -14,13 +14,41 @@ namespace VTOL
 		private Harmony _harmony;
 		private const string HarmonyID = "vtol.patch";
 
+		public static GameStates GameState { get; private set; }
+
+		/// <summary>
+		/// Method called on mod initialization
+		/// </summary>
+		protected override void OnModsInitialized()
+        {
+			GameState = GameStates.OnModsInitialized;
+        }
+		
 		/// <summary>
 		/// Method called on mod initialization (while loading a save)
 		/// </summary>
 		protected override void Initialize()
 		{
+			GameState = GameStates.Initialize;
+			
 			_harmony = new Harmony(HarmonyID);
 			_harmony.PatchAll();
+		}
+
+		/// <summary>
+		/// Method called on game starting
+		/// </summary>
+		protected override void OnGameStarting()
+		{
+			GameState = GameStates.OnGameStarting;
+		}
+
+		/// <summary>
+		/// Method called when the process of starting and loading the game has been finished
+		/// </summary>
+		protected override void OnGameStarted()
+        {
+			GameState = GameStates.OnGameStarted;
 		}
 
 		/// <summary>
@@ -28,6 +56,8 @@ namespace VTOL
 		/// </summary>
 		protected override void Deinitialize()
 		{
+			GameState = GameStates.OnDeinitialize;
+			
 			_harmony.UnpatchAll(HarmonyID);
 			_harmony = null;
 		}
