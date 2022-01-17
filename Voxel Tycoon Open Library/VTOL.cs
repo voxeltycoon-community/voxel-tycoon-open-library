@@ -4,7 +4,6 @@ using VoxelTycoon.Modding;
 
 namespace VTOL 
 {
-
 	/// <summary>
 	/// The main library entry point.
 	/// </summary>
@@ -12,15 +11,48 @@ namespace VTOL
 	public class VTOL : Mod
 	{
 		private Harmony _harmony;
-		private const string HarmonyID = "vtol.patch";
+		private const string _harmonyID = "vtol.patch";
 
 		/// <summary>
-		/// Method called on mod initialization (while loading a save)
+		/// The GameState Voxel Tycoon is currently in.
 		/// </summary>
-		protected override void Initialize()
+		/// <remarks>The game states are based on the virtual methods provided in <see cref="VoxelTycoon.Modding.Mod"/>.</remarks>
+		public static GameStates GameState { get; private set; }
+
+		/// <summary>
+		/// Method called when this mod is being registered. This is before all mods are available.
+		/// </summary>
+		protected override void Initialize() 
 		{
-			_harmony = new Harmony(HarmonyID);
+			GameState = GameStates.Initialize;
+
+			_harmony = new Harmony(_harmonyID);
 			_harmony.PatchAll();
+		}
+
+		/// <summary>
+		/// Method called when all mods are registered.
+		/// From here you can access other mods.
+		/// </summary>
+		protected override void OnModsInitialized()
+		{
+			GameState = GameStates.OnModsInitialized;
+		}
+
+		/// <summary>
+		/// Method called before the save or new game is being loaded/generated.
+		/// </summary>
+		protected override void OnGameStarting()
+		{
+			GameState = GameStates.OnGameStarting;
+		}
+
+		/// <summary>
+		/// Method called after the save or new game has been loaded/generated.
+		/// </summary>
+		protected override void OnGameStarted()
+		{
+			GameState = GameStates.OnGameStarted;
 		}
 
 		/// <summary>
@@ -28,9 +60,10 @@ namespace VTOL
 		/// </summary>
 		protected override void Deinitialize()
 		{
-			_harmony.UnpatchAll(HarmonyID);
+			GameState = GameStates.OnDeinitialize;
+			
+			_harmony.UnpatchAll(_harmonyID);
 			_harmony = null;
 		}
 	}
-
 }
