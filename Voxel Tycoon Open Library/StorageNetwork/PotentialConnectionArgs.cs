@@ -14,7 +14,8 @@ namespace VTOL.StorageNetwork
 		private readonly IList<StorageBuildingSibling> _siblings;
 		private readonly IList<StorageBuildingSibling> _addedConnections = new List<StorageBuildingSibling>();
 		private readonly IList<PotentialConnection> _connections;
-		private ISet<int> _buildingIds;
+		private Lazy<ISet<int>> _buildingIds = new Lazy<ISet<int>>();
+		private bool _isClosed;
 
 		internal PotentialConnectionArgs(IList<StorageBuildingSibling> siblings)
 		{
@@ -27,6 +28,9 @@ namespace VTOL.StorageNetwork
 			}
 		}
 
+		/// <summary>
+		/// IEnumerable for cycling through the list with potential connections.
+		/// </summary>
 		public IEnumerable<PotentialConnection> Connections => _connections;
 		internal IList<StorageBuildingSibling> AddedConnections => _addedConnections;
 
@@ -34,20 +38,26 @@ namespace VTOL.StorageNetwork
 		/// Create a connection with a building not detected by <see cref="StorageBuildingManager.FindSiblings(StorageNetworkBuilding)"/>.
 		/// </summary>
 		/// <param name="storageBuildingSibling">The <see cref="StorageBuildingSibling"/> containing the information to create a connection.</param>
+		/// <exception cref="InvalidOperationException">The potential connections have been processed or a building with a similar id is already a potential connection.</exception>
 		/// <remarks>A <see cref="StorageBuildingSibling"/> can be created with <see cref="StorageNetworkUtils.CreateSiblingOf(StorageNetworkBuilding, StorageNetworkBuilding, bool)"/>.</remarks>
 		public void AddConnection(StorageBuildingSibling storageBuildingSibling)
 		{
+			if (_isClosed)
+			{
+				throw new InvalidOperationException($"You are not allowed to add any new connections after the potential connections have been processed.");
+			}
+			
 			RegisterBuildingIds();
 
 			int id = storageBuildingSibling.Building.Id;
 
-			if (_buildingIds.Contains(id))
+			if (_buildingIds.Value.Contains(id))
 			{
 				throw new InvalidOperationException($"Building with ID: {id} was already detected or has already been added.");
 			}
 
 			_addedConnections.Add(storageBuildingSibling);
-			_buildingIds.Add(id);
+			_buildingIds.Value.Add(id);
 		}
 		
 		/// <summary>
@@ -68,6 +78,8 @@ namespace VTOL.StorageNetwork
 				}
 			}
 
+			_isClosed = true;
+
 			return _siblings;
 		}
 
@@ -78,11 +90,9 @@ namespace VTOL.StorageNetwork
 		{
 			if (_buildingIds == null)
 			{
-				_buildingIds = new HashSet<int>();
-
 				foreach (StorageBuildingSibling sibling in _siblings)
 				{
-					_buildingIds.Add(sibling.Building.Id);
+					_buildingIds.Value.Add(sibling.Building.Id);
 				}
 			}
 		}
