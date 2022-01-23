@@ -8,7 +8,7 @@ namespace VTOL
 	/// The main library entry point.
 	/// </summary>
 	[UsedImplicitly]
-	public class VTOL : Mod
+	public class Vtol : Mod
 	{
 		private Harmony _harmony;
 		private const string _harmonyID = "vtol.patch";

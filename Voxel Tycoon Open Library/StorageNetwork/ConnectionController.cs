@@ -22,9 +22,9 @@ namespace VTOL.StorageNetwork
 		/// <exception cref="InvalidOperationException">When trying to register while the game is done loading.</exception>
 		public void Register(int assetId, OnStorageNetworkUpdate connectionFilter, int priority = 0)
 		{
-			if (VTOL.GameState > GameStates.OnGameStarting)
+			if (Vtol.GameState > GameStates.OnGameStarting)
 			{
-				throw new InvalidOperationException("You are not allowed to register after the game is completely loaded and started.");
+				throw new InvalidOperationException($"You are not allowed to register after state OnGameStarting. The current state is {Vtol.GameState}.");
 			}
 
 			PriorityConnectionFilter priorityListener = new PriorityConnectionFilter(assetId, connectionFilter, priority);
