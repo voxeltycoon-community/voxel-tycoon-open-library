@@ -22,7 +22,7 @@ namespace VTOL.StorageNetwork
 		/// <exception cref="InvalidOperationException">When trying to register while the game is done loading.</exception>
 		public void Register(int assetId, OnStorageNetworkUpdate connectionFilter, int priority = 0)
 		{
-			if (VTOL.GameState < GameStates.OnGameStarted)
+			if (VTOL.GameState > GameStates.OnGameStarting)
 			{
 				throw new InvalidOperationException("You are not allowed to register after the game is completely loaded and started.");
 			}
@@ -38,7 +38,7 @@ namespace VTOL.StorageNetwork
 		/// <param name="assetId">The specified AssetId</param>
 		/// <param name="connectionFilters">The list with all listeners. <code>Null</code> if none are found.</param>
 		/// <returns>True if listeners are registered with specified AssetId. Otherwise false.</returns>
-		internal bool TryGetListeners(int assetId, out ISet<PriorityConnectionFilter> connectionFilters) => _connectionFilters.TryGetValue(assetId, out connectionFilters);
+		internal bool TryGetConnectionFilters(int assetId, out ISet<PriorityConnectionFilter> connectionFilters) => _connectionFilters.TryGetValue(assetId, out connectionFilters);
 
 		/// <summary>
 		/// Adds a listener to the dictionary with specified AssetId.
