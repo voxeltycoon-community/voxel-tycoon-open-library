@@ -7,20 +7,21 @@ namespace VTOL.StorageNetwork
 {
 	/// <summary>
 	/// This class is used to collect all the Siblings found by <see cref="VoxelTycoon.Buildings.StorageBuildingManager.FindSiblings(StorageNetworkBuilding)"/>
-	/// and allows them to be removed based on specified conditions.
+	/// All the Connection Filter methods will receive this class as their Event Args, allowing them to alter the connections through this class.
 	/// </summary>
 	public class PotentialConnectionArgs
 	{
 		private readonly IList<StorageBuildingSibling> _siblings;
 		private readonly IList<StorageBuildingSibling> _addedConnections = new List<StorageBuildingSibling>();
 		private readonly IList<PotentialConnection> _connections;
-		private Lazy<ISet<int>> _buildingIds = new Lazy<ISet<int>>();
+		private Lazy<ISet<int>> _buildingIds;
 		private bool _isClosed;
 
 		internal PotentialConnectionArgs(IList<StorageBuildingSibling> siblings)
 		{
 			_siblings = siblings;
 			_connections = new List<PotentialConnection>(_siblings.Count);
+			_buildingIds = new Lazy<ISet<int>>(RegisterBuildingIds);
 
 			foreach (StorageBuildingSibling sibling in _siblings)
 			{
@@ -47,8 +48,6 @@ namespace VTOL.StorageNetwork
 				throw new InvalidOperationException($"You are not allowed to add any new connections after the potential connections have been processed.");
 			}
 			
-			RegisterBuildingIds();
-
 			int id = storageBuildingSibling.Building.Id;
 
 			if (_buildingIds.Value.Contains(id))
@@ -59,11 +58,12 @@ namespace VTOL.StorageNetwork
 			_addedConnections.Add(storageBuildingSibling);
 			_buildingIds.Value.Add(id);
 		}
-		
+
 		/// <summary>
 		/// Removes all the StorageBuildingSiblings that have been canceled.
 		/// </summary>
 		/// <returns>Returns a list with the StorageBuildingSiblings which are not canceled.</returns>
+		// ReSharper disable once ReturnTypeCanBeEnumerable.Global
 		internal IList<StorageBuildingSibling> RemoveCanceled()
 		{
 			Trace.Assert(_connections.Count == _siblings.Count);
@@ -83,18 +83,20 @@ namespace VTOL.StorageNetwork
 			return _siblings;
 		}
 
-		//When a new connection is added, the connected building cannot be already detected by the normal Voxel Tycoon detection. After all, this would allow to force a connection with an already detected building, bypassing other registered filters.
-		//To check if a building was already detected a list with id's is created from the list of detected buildings (_siblings). This only has to happen when a custom connection is added with AddConnection(), and only once.
-		//When an instance of _buildingId's already exists (!= null), there is no need to create a new list, since the detected buildings wont change during the lifecycle of this instance of PotentialConnectionArgs.
-		private void RegisterBuildingIds()
+		//When adding a completely new connection, meaning creating a connection with a building which Voxel Tycoon is not detecting, the to be connected building cannot already been detected by the normal Voxel Tycoon detection.
+		//After all, since the filters arent checking the newly added connections (_addedConnections), this would allow to force a connection with an already detected building, bypassing other registered filters.
+		//To check if a building was already detected, a list with id's is created from the list of detected buildings (_siblings). This only has to happen when a custom connection is added with AddConnection(), and only once.
+		//This is why _buildingIds is using the Lazy-class.
+		private ISet<int> RegisterBuildingIds()
 		{
-			if (_buildingIds == null)
+			ISet<int> buildingIds = new HashSet<int>();
+			
+			foreach (StorageBuildingSibling sibling in _siblings) 
 			{
-				foreach (StorageBuildingSibling sibling in _siblings)
-				{
-					_buildingIds.Value.Add(sibling.Building.Id);
-				}
+				buildingIds.Add(sibling.Building.Id);
 			}
+
+			return buildingIds;
 		}
 	}
 }
