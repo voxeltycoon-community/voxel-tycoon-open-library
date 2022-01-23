@@ -45,7 +45,7 @@ namespace VTOL.StorageNetwork
 		{
 			if (_isClosed)
 			{
-				throw new InvalidOperationException($"You are not allowed to add any new connections after the potential connections have been processed.");
+				throw new InvalidOperationException("You are not allowed to add any new connections after the potential connections have been processed.");
 			}
 			
 			int id = storageBuildingSibling.Building.Id;
