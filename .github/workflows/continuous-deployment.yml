@@ -160,7 +160,7 @@ jobs:
       # Using the command line build tools from .NET
       - name: Build Library
         shell: bash
-        run: dotnet build --Configuration Release --AssemblyVersion ${{ steps.get_version.outputs.version }} -- FileVersion ${{ steps.get_version.outputs.version }}
+        run: dotnet build --configuration Release -property:version=${{ steps.get_version.outputs.version }}
       # Tests the library
       # Using the command line build tools from .NET
       - name: Test Library
