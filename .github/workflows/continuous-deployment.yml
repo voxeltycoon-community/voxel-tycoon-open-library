@@ -120,7 +120,7 @@ jobs:
       # Only supports: Ubuntu, Fedora, Alpine and OsX.
       #
       - name: Install Libevent-Dev
-        run: sudo apt-get install libevent-dev
+        run: sudo apt-get install libevent-dev git
       # Automatically determines the semantic version based on commit messages.
       # https://github.com/marketplace/actions/git-version
       #
