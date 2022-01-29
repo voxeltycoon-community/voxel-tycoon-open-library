@@ -113,11 +113,53 @@ jobs:
         uses: actions/setup-dotnet@v1.8.2
         with:
           dotnet-version: ${{ matrix.csharp }}
+      # Automatically determines the semantic version based on commit messages.
+      # https://github.com/marketplace/actions/git-version
+      #
+      # tool-version     - The version of the tool to run
+      # release-branch   - The name of the master/main branch
+      # dev-branch       - The name of the development branch
+      # minor-identifier - The string used to identify a minor release
+      #                    (wrap with '/' to match using a regular expression)
+      # major-identifier - The string used to identify a major release
+      #                    (wrap with '/' to match using a regular expression)
+      # prefix           - The prefix used for the version name
+      # log-paths        - The paths used to calculate changes (comma-separated)
+      - name: Set Semantic Version
+        uses: codacy/git-version@2.4.0
+        with:
+          release-branch: main
+          dev-branch: dev
+          minor-identifier: /([fF]eature)|([mM]inor)/g
+          major-identifier: /([bB]reaking)|([mM]ajor)/g
+          # intentionally left empty - no prefix.
+          prefix:
+      # Retrieves the version for usage in variables.
+      # https://github.com/marketplace/actions/get-version
+      #
+      # ouputs:
+      # version - The pushed version. v1.2.7.
+      # version-without-v - The pushed version with the leading v stripped: 1.2.7
+      # is-semver  - Set to true if the pushed version is a valid semver value.
+      #              If it's not, then this output will not be set.
+      # major      - The semver major version, for example 1
+      #              in the case of v1.2.3-ALPHA.0+BUILD.1.
+      # minor      - The semver minor version, for example 2
+      #              in the case of v1.2.3-ALPHA.0+BUILD.1.
+      # patch      - The semver patch version, for example 3
+      #              in the case of v1.2.3-ALPHA.0+BUILD.1.
+      # prerelease - The semver prerelease version, for example ALPHA.0
+      #              in the case of v1.2.3-ALPHA.0+BUILD.1
+      # build      - The semver build version, for example BUILD.1
+      #              in the case of v1.2.3-ALPHA.0+BUILD.1.
+      - name: Retrieve version
+        uses: battila7/get-version-action@v2.2.1
+        id: get_version
       # Build the library
       # Using the command line build tools from .NET
       - name: Build Library
         shell: bash
-        run: dotnet build --configuration Release
+        run: dotnet build --Configuration Release --AssemblyVersion ${{ steps.get_version.outputs.version }} -- FileVersion ${{ steps.get_version.outputs.version }}
       # Tests the library
       # Using the command line build tools from .NET
       - name: Test Library
