@@ -114,6 +114,13 @@ jobs:
         uses: actions/setup-dotnet@v1.8.2
         with:
           dotnet-version: ${{ matrix.csharp }}
+      # Install Git-Version Dependencies
+      # https://github.com/marketplace/actions/git-version#requirements
+      #
+      # Only supports: Ubuntu, Fedora, Alpine and OsX.
+      #
+      - name: Install Libevent-Dev
+        run: sudo apt-get install libevent-dev
       # Automatically determines the semantic version based on commit messages.
       # https://github.com/marketplace/actions/git-version
       #
