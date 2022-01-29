@@ -79,6 +79,8 @@ jobs:
         with:
           # Large File Storage Support
           lfs: false
+          # Fetch the entire repo (used to get all versions)
+          fetch-depth: 0
       # Get all the dependency files for building from a remote repository.
       # https://github.com/marketplace/actions/checkout
       #
@@ -120,7 +122,7 @@ jobs:
       # Only supports: Ubuntu, Fedora, Alpine and OsX.
       #
       - name: Install Libevent-Dev
-        run: sudo apt-get install libevent-dev git
+        run: sudo apt-get install libevent-dev
       # Automatically determines the semantic version based on commit messages.
       # https://github.com/marketplace/actions/git-version
       #
