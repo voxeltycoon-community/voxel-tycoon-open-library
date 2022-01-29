@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>VTOL</RootNamespace>
     <Nullable>disable</Nullable>
-    <Version>0.1.0</Version>
+    <Version>0.0.0</Version>
     <Company>Voxel Tycoon Community</Company>
     <NeutralLanguage>en</NeutralLanguage>
     <RepositoryUrl>https://github.com/voxeltycoon-community/voxel-tycoon-open-library</RepositoryUrl>

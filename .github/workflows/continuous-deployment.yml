@@ -149,7 +149,7 @@ jobs:
       # Using the command line build tools from .NET
       - name: Build Library
         shell: bash
-        run: dotnet build --configuration Release -property:version=${{ steps.git_version.outputs.version }}
+        run: dotnet build --configuration Release -property:version=${{ steps.git-version.outputs.version }}
       # Tests the library
       # Using the command line build tools from .NET
       - name: Test Library
