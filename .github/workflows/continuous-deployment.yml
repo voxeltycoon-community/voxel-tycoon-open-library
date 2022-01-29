@@ -127,7 +127,8 @@ jobs:
       # prefix           - The prefix used for the version name
       # log-paths        - The paths used to calculate changes (comma-separated)
       - name: Set Semantic Version
-        uses: codacy/git-version@2.4.0
+        uses: codacy/git-version@2.5.3
+        id: git-version
         with:
           release-branch: main
           dev-branch: dev
@@ -135,32 +136,11 @@ jobs:
           major-identifier: /([bB]reaking)|([mM]ajor)/g
           # intentionally left empty - no prefix.
           prefix:
-      # Retrieves the version for usage in variables.
-      # https://github.com/marketplace/actions/get-version
-      #
-      # ouputs:
-      # version - The pushed version. v1.2.7.
-      # version-without-v - The pushed version with the leading v stripped: 1.2.7
-      # is-semver  - Set to true if the pushed version is a valid semver value.
-      #              If it's not, then this output will not be set.
-      # major      - The semver major version, for example 1
-      #              in the case of v1.2.3-ALPHA.0+BUILD.1.
-      # minor      - The semver minor version, for example 2
-      #              in the case of v1.2.3-ALPHA.0+BUILD.1.
-      # patch      - The semver patch version, for example 3
-      #              in the case of v1.2.3-ALPHA.0+BUILD.1.
-      # prerelease - The semver prerelease version, for example ALPHA.0
-      #              in the case of v1.2.3-ALPHA.0+BUILD.1
-      # build      - The semver build version, for example BUILD.1
-      #              in the case of v1.2.3-ALPHA.0+BUILD.1.
-      - name: Retrieve version
-        uses: battila7/get-version-action@v2.2.1
-        id: get_version
       # Build the library
       # Using the command line build tools from .NET
       - name: Build Library
         shell: bash
-        run: dotnet build --configuration Release -property:version=${{ steps.get_version.outputs.version }}
+        run: dotnet build --configuration Release -property:version=${{ steps.git_version.outputs.version }}
       # Tests the library
       # Using the command line build tools from .NET
       - name: Test Library
