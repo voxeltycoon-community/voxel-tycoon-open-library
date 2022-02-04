@@ -10,9 +10,8 @@ namespace VTOL.StorageNetwork
 	/// </summary>
 	public class ConnectionController : LazyManager<ConnectionController>
 	{
-		//We're using a SortedSet, because a SortedList uses a KeyValuePair
 		private readonly IDictionary<int, List<PriorityConnectionFilter>> _connectionFilters = new Dictionary<int, List<PriorityConnectionFilter>>();
-		private bool _isDirty;
+		private bool _isModified;
 
 		/// <summary>
 		/// Registers a method which decides if a connection between two <see cref="StorageNetworkBuilding"/> should be allowed or not.
@@ -31,7 +30,7 @@ namespace VTOL.StorageNetwork
 			PriorityConnectionFilter priorityListener = new PriorityConnectionFilter(assetId, connectionFilter, priority);
 
 			AddConnectionFilter(assetId, priorityListener);
-			_isDirty = true;
+			_isModified = true;
 		}
 
 		/// <summary>
@@ -42,7 +41,7 @@ namespace VTOL.StorageNetwork
 		/// <returns>True if listeners are registered with specified AssetId. Otherwise false.</returns>
 		internal bool TryGetConnectionFilters(int assetId, out IList<PriorityConnectionFilter> connectionFilters)
 		{
-			if (_isDirty)
+			if (_isModified)
 			{
 				SortConnectionFilters();
 			}
@@ -69,12 +68,17 @@ namespace VTOL.StorageNetwork
 			connectionFilters.Add(connectionFilter);
 		}
 
+		/// <summary>
+		/// Sorts every list with filters as soon as the filters are being accessed.
+		/// </summary>
 		private void SortConnectionFilters()
 		{
 			foreach (List<PriorityConnectionFilter> connectionFilters in _connectionFilters.Values)
 			{
 				connectionFilters.Sort();
 			}
+
+			_isModified = false;
 		}
 	}
 

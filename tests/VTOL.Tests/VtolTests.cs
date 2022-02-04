@@ -5,7 +5,10 @@ using NUnit.Framework;
 
 namespace VTOL
 {
-	class VtolTests
+	/// <summary>
+	/// This class is used to test the base functionality of VTOL.
+	/// </summary>
+	internal class VtolTests
 	{
 		[Test]
 		public void ExecuteOnGameStarting()
