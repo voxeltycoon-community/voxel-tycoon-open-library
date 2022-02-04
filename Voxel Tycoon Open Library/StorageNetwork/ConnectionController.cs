@@ -10,8 +10,8 @@ namespace VTOL.StorageNetwork
 	/// </summary>
 	public class ConnectionController : LazyManager<ConnectionController>
 	{
-		//We're using a SortedSet, because a SortedList uses a KeyValuePair
-		private readonly IDictionary<int, ISet<PriorityConnectionFilter>> _connectionFilters = new Dictionary<int, ISet<PriorityConnectionFilter>>();
+		private readonly IDictionary<int, List<PriorityConnectionFilter>> _connectionFilters = new Dictionary<int, List<PriorityConnectionFilter>>();
+		private bool _isModified;
 
 		/// <summary>
 		/// Registers a method which decides if a connection between two <see cref="StorageNetworkBuilding"/> should be allowed or not.
@@ -20,7 +20,7 @@ namespace VTOL.StorageNetwork
 		/// <param name="connectionFilter">The method which decides if a connection should be canceled or not.</param>
 		/// <param name="priority">Filters with a higher priority can override adjustments made by filters with a lower priority.</param>
 		/// <exception cref="InvalidOperationException">When trying to register while the game is done loading.</exception>
-		public void Register(int assetId, OnStorageNetworkUpdate connectionFilter, int priority = 0)
+		public void RegisterConnectionFilter(int assetId, OnStorageNetworkUpdate connectionFilter, int priority = 0)
 		{
 			if (Vtol.GameState > GameStates.OnGameStarting)
 			{
@@ -29,7 +29,8 @@ namespace VTOL.StorageNetwork
 
 			PriorityConnectionFilter priorityListener = new PriorityConnectionFilter(assetId, connectionFilter, priority);
 
-			AddListener(assetId, priorityListener);
+			AddConnectionFilter(assetId, priorityListener);
+			_isModified = true;
 		}
 
 		/// <summary>
@@ -38,21 +39,46 @@ namespace VTOL.StorageNetwork
 		/// <param name="assetId">The specified AssetId</param>
 		/// <param name="connectionFilters">The list with all listeners. <code>Null</code> if none are found.</param>
 		/// <returns>True if listeners are registered with specified AssetId. Otherwise false.</returns>
-		internal bool TryGetConnectionFilters(int assetId, out ISet<PriorityConnectionFilter> connectionFilters) => _connectionFilters.TryGetValue(assetId, out connectionFilters);
+		internal bool TryGetConnectionFilters(int assetId, out IList<PriorityConnectionFilter> connectionFilters)
+		{
+			if (_isModified)
+			{
+				SortConnectionFilters();
+			}
+			
+			bool isFound = _connectionFilters.TryGetValue(assetId, out List<PriorityConnectionFilter> tempConnectionFilters);
+
+			connectionFilters = tempConnectionFilters;
+
+			return isFound;
+		}
 
 		/// <summary>
 		/// Adds a listener to the dictionary with specified AssetId.
 		/// </summary>
 		/// <param name="assetId">The AssetId of one of the StorageNetworkBuildings which is part of the connection to be adjusted.</param>
 		/// <param name="connectionFilter">The method which decides if a connection should be allowed.</param>
-		private void AddListener(int assetId, PriorityConnectionFilter connectionFilter)
+		private void AddConnectionFilter(int assetId, PriorityConnectionFilter connectionFilter)
 		{
-			if (!_connectionFilters.TryGetValue(assetId, out ISet<PriorityConnectionFilter> connectionFilters))
+			if (!_connectionFilters.TryGetValue(assetId, out List<PriorityConnectionFilter> connectionFilters))
 			{
-				connectionFilters = _connectionFilters[assetId] = new SortedSet<PriorityConnectionFilter>();
+				connectionFilters = _connectionFilters[assetId] = new List<PriorityConnectionFilter>();
 			}
 			
 			connectionFilters.Add(connectionFilter);
+		}
+
+		/// <summary>
+		/// Sorts every list with filters as soon as the filters are being accessed.
+		/// </summary>
+		private void SortConnectionFilters()
+		{
+			foreach (List<PriorityConnectionFilter> connectionFilters in _connectionFilters.Values)
+			{
+				connectionFilters.Sort();
+			}
+
+			_isModified = false;
 		}
 	}
 

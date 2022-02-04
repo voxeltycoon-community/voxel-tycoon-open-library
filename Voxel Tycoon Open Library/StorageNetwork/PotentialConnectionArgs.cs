@@ -17,8 +17,9 @@ namespace VTOL.StorageNetwork
 		private Lazy<ISet<int>> _buildingIds;
 		private bool _isClosed;
 
-		internal PotentialConnectionArgs(IList<StorageBuildingSibling> siblings)
+		internal PotentialConnectionArgs(StorageNetworkBuilding storageNetworkBuilding, IList<StorageBuildingSibling> siblings)
 		{
+			Source = storageNetworkBuilding;
 			_siblings = siblings;
 			_connections = new List<PotentialConnection>(_siblings.Count);
 			_buildingIds = new Lazy<ISet<int>>(RegisterBuildingIds);
@@ -29,6 +30,10 @@ namespace VTOL.StorageNetwork
 			}
 		}
 
+		/// <summary>
+		/// The <see cref="StorageNetworkBuilding"/> of which the connections are being filtered.
+		/// </summary>
+		public StorageNetworkBuilding Source { get; private set; }
 		/// <summary>
 		/// IEnumerable for cycling through the list with potential connections.
 		/// </summary>
