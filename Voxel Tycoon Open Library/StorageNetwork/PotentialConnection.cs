@@ -3,7 +3,7 @@
 namespace VTOL.StorageNetwork
 {
 	/// <summary>
-	/// Class used by <see cref="PotentialConnectionArgs"/> to store each building detected, combined with if it will be canceled or not.
+	/// Class used by <see cref="PotentialConnectionArgs"/> to store each building detected. Also, this class keeps track of a connection should be canceled once all filters have been executed.
 	/// </summary>
 	public class PotentialConnection
 	{

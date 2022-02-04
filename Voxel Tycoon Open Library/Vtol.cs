@@ -1,7 +1,9 @@
-﻿using HarmonyLib;
+﻿using System.Runtime.CompilerServices;
+using HarmonyLib;
 using JetBrains.Annotations;
 using VoxelTycoon.Modding;
 
+[assembly: InternalsVisibleTo("VTOL.Tests")]
 namespace VTOL 
 {
 	/// <summary>
