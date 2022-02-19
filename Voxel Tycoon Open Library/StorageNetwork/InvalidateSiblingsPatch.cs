@@ -18,7 +18,9 @@ namespace VTOL.StorageNetwork
 	{
 		static void Postfix(StorageNetworkBuilding building) 
 		{
-			if (!ConnectionController.Current.TryGetConnectionFilters(building.AssetId, out IList<PriorityConnectionFilter> connectionFilters))
+			if (building.Id == 0 || 
+				//If building.Id is 0, this means the building is still a ghost (building mode), and the storage network doesnt need to update. Unfortunately because of an inefficiency in Voxel Tycoon it is constantly updating the network. This way we prevent the filters from happening while the building is still a ghost.
+				!ConnectionController.Current.TryGetConnectionFilters(building.AssetId, out IList<PriorityConnectionFilter> connectionFilters))
 			{
 				return;
 			}
