@@ -7,7 +7,7 @@ namespace VTOL.StorageNetwork
 	/// </summary>
 	internal struct PriorityConnectionFilter : IComparable<PriorityConnectionFilter>
 	{
-		public PriorityConnectionFilter(IConnectionFilter connectionFilter, int priority)
+		public PriorityConnectionFilter(IConnectionFilter connectionFilter, double priority)
 		{
 			ConnectionFilter = connectionFilter;
 			Priority = priority;
@@ -17,7 +17,7 @@ namespace VTOL.StorageNetwork
 		/// The priority of the filter.
 		/// </summary>
 		/// <remarks>Filters with a higher priority will be executed after filters with a lower priority. Meaning the alterations made by a filter with a higher priority cannot be overwritten by a filter with a lower priority.</remarks>
-		public int Priority { get; }
+		public double Priority { get; }
 
 		/// <summary>
 		/// The class with the filter logic.

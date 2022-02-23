@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using VoxelTycoon.Buildings;
+using VTOL.Debugging;
 
 namespace VTOL.StorageNetwork
 {
@@ -60,6 +61,8 @@ namespace VTOL.StorageNetwork
 
 			if (BuildingIds.Contains(id))
 			{
+				VtolLogger.Log($"Building {storageBuildingSibling.Building.DisplayName} with id {id} was already detected, or has already been added as a connection. Ignoring addition.");
+				
 				return false;
 			}
 

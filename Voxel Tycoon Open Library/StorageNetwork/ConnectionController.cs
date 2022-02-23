@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using VoxelTycoon;
 using VoxelTycoon.Buildings;
 
@@ -10,15 +11,10 @@ namespace VTOL.StorageNetwork
 	/// </summary>
 	public class ConnectionController : LazyManager<ConnectionController>
 	{
-		private Lazy<List<PriorityConnectionFilter>> _connectionFilters;
+		private Lazy<List<PriorityConnectionFilter>> _connectionFilters = new Lazy<List<PriorityConnectionFilter>>();
 		private bool _isModified;
 
 		private List<PriorityConnectionFilter> ConnectionFilters => _connectionFilters.Value; 
-
-		protected override void OnInitialize()
-		{
-			_connectionFilters = new Lazy<List<PriorityConnectionFilter>>(() => new List<PriorityConnectionFilter>());
-		}
 
 		/// <summary>
 		/// Registers a method which decides if a connection between two <see cref="StorageNetworkBuilding"/> should be allowed or not.
@@ -27,7 +23,7 @@ namespace VTOL.StorageNetwork
 		/// <param name="priority">(Optional) The priority of the filter. Default value is 0.</param>
 		/// <exception cref="InvalidOperationException">When trying to register while the game is done loading.</exception>
 		/// <remarks>Filters with a higher priority will be executed after filters with a lower priority. Meaning the alterations made by a filter with a higher priority cannot be overwritten by a filter with a lower priority.</remarks>
-		public void RegisterConnectionFilter(IConnectionFilter connectionFilter, int priority = 0)
+		public void RegisterConnectionFilter(IConnectionFilter connectionFilter, double priority = 0)
 		{
 			if (Vtol.GameState > GameStates.OnGameStarting)
 			{
@@ -59,6 +55,7 @@ namespace VTOL.StorageNetwork
 			return true;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private void TrySort()
 		{
 			if (_isModified)

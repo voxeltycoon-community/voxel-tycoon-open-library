@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 using VoxelTycoon.Modding;
 
 [assembly: InternalsVisibleTo("VTOL.Tests")]
-namespace VTOL 
+namespace VTOL
 {
 	/// <summary>
 	/// The main library entry point.
