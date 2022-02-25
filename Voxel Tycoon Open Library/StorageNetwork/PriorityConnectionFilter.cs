@@ -15,9 +15,9 @@ namespace VTOL.StorageNetwork
 
 		/// <summary>
 		/// The priority of the filter.
+		/// <para>Filters with a higher priority will be executed after filters with a lower priority. Meaning the alterations made by a filter with a higher priority cannot be overwritten by a filter with a lower priority.</para>
 		/// </summary>
-		/// <remarks>Filters with a higher priority will be executed after filters with a lower priority. Meaning the alterations made by a filter with a higher priority cannot be overwritten by a filter with a lower priority.</remarks>
-		public double Priority { get; }
+		public double Priority { get; private set; }
 
 		/// <summary>
 		/// The class with the filter logic.
