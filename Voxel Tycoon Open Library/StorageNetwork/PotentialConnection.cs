@@ -7,12 +7,17 @@ namespace VTOL.StorageNetwork
 	/// </summary>
 	public class PotentialConnection
 	{
-		internal PotentialConnection(StorageNetworkBuilding building)
-		{
-			Building = building;
-		}
+		internal PotentialConnection(StorageNetworkBuilding building) => Building = building;
 
+		/// <summary>
+		/// If this connection should be canceled or not.
+		/// </summary>
+		/// <remarks>This might be overwritten by a filter with a higher priority.</remarks>
 		public bool IsCanceled { get; set; }
+
+		/// <summary>
+		/// The building <see cref="PotentialConnectionArgs.Source"/> is potentially connecting with.
+		/// </summary>
 		public StorageNetworkBuilding Building { get; }
 	}
 }
