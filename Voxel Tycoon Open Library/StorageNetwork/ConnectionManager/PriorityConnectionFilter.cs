@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VTOL.StorageNetwork
+namespace VTOL.StorageNetwork.ConnectionManager
 {
 	/// <summary>
 	/// When a connection filter is registered, it is stored in an instance of <see cref="PriorityConnectionFilter"/>. <see cref="PriorityConnectionFilter"/> is used to sort every registered filter based on their priority.

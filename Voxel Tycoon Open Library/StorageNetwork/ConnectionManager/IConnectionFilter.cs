@@ -1,6 +1,6 @@
 ﻿using VoxelTycoon.Buildings;
 
-namespace VTOL.StorageNetwork
+namespace VTOL.StorageNetwork.ConnectionManager
 {
 	/// <summary>
 	/// A class which is used to build a connection filter should implement this interface.

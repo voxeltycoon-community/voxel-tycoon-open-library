@@ -1,6 +1,6 @@
 ﻿using VoxelTycoon.Buildings;
 
-namespace VTOL.StorageNetwork
+namespace VTOL.StorageNetwork.ConnectionManager
 {
 	/// <summary>
 	/// Class used by <see cref="PotentialConnectionArgs"/> to store each building detected. Also, this class keeps track of a connection should be canceled once all filters have been executed.

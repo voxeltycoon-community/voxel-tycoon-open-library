@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using VoxelTycoon;
 using VoxelTycoon.Buildings;
 
-namespace VTOL.StorageNetwork
+namespace VTOL.StorageNetwork.ConnectionManager
 {
 	/// <summary>
 	/// This class provides methods to allow for adjusting Storage Network connections.

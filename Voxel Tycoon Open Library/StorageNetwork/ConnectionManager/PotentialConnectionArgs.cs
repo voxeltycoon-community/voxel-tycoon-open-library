@@ -4,7 +4,7 @@ using System.Diagnostics;
 using VoxelTycoon.Buildings;
 using VTOL.Debugging;
 
-namespace VTOL.StorageNetwork
+namespace VTOL.StorageNetwork.ConnectionManager
 {
 	/// <summary>
 	/// This class is used to collect all the Siblings found by <see cref="VoxelTycoon.Buildings.StorageBuildingManager.FindSiblings(StorageNetworkBuilding)"/>
