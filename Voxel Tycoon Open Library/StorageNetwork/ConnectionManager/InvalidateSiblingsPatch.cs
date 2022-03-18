@@ -17,7 +17,7 @@ namespace VTOL.StorageNetwork.ConnectionManager
 	[HarmonyPatch("FindSiblings")]
 	internal static class InvalidateSiblingsPatch
 	{
-		static void Postfix(StorageNetworkBuilding building) 
+		internal static void Postfix(StorageNetworkBuilding building) 
 		{
 			if (!building.IsBuilt ||
 				!ConnectionController.Current.GetConnectionFilters(out IList<PriorityConnectionFilter> connectionFilters))

@@ -19,7 +19,7 @@ namespace VTOL
 		/// The GameState Voxel Tycoon is currently in.
 		/// </summary>
 		/// <remarks>The game states are based on the virtual methods provided in <see cref="VoxelTycoon.Modding.Mod"/>.</remarks>
-		public static GameStates GameState { get; private set; }
+		public static GameStates GameState { get; internal set; }
 
 		/// <summary>
 		/// Method called when this mod is being registered. This is before all mods are available.
