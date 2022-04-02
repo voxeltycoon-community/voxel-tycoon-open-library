@@ -21,29 +21,45 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\0Harmony.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule">
       <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
       <HintPath>$(VoxelTycoonInstallationDir)\VoxelTycoon_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+      <Private>false</Private>
     </Reference>
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command=":: Visual Studio builds an extra `.deps.json` file for our depencies.&#xD;&#xA;:: However, we won't be using it in our mod, so we remove it.&#xD;&#xA;:: &#xD;&#xA;:: /q - Removes confirmation prompt when deleting files.&#xD;&#xA;del &quot;$(TargetDir)*.deps.json&quot; /q&#xD;&#xA;&#xD;&#xA;:: Next up we need  to copy all relevant files to our workshop.&#xD;&#xA;:: This will mostly be all our dlls and possible resource files.&#xD;&#xA;::&#xD;&#xA;:: /d - Only overwrite files if they are newer.&#xD;&#xA;:: /i - Create the destination if it does not exist.&#xD;&#xA;:: /s - Also copy subdirectories within the source.&#xD;&#xA;:: /y - Overwrites existing files in the destination directory.&#xD;&#xA;xcopy &quot;$(TargetDir)*.*&quot; &quot;$(SolutionDir)workshop\&quot; /d /i /s /y" />
+  </Target>
 
 </Project>

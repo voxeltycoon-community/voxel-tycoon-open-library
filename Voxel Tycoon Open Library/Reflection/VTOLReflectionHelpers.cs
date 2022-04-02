@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 using System;
 using System.Reflection;
 
-namespace VTOL
+namespace VTOL.Reflection
 {
     /// <summary>
     /// Class with methods to help with reflection.

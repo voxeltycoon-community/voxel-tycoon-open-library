@@ -7,7 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Voxel Tycoon Open Library",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VTOL.DevTools", "utils\VTOL.DevTools.csproj", "{7F7DCA8B-83DE-4463-B00F-711B951855CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VTOL.Tests", "tests\VTOL.Tests\VTOL.Tests.csproj", "{3F5B5F85-7B8A-474C-9CAB-53E3E7697A45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VTOL.Tests", "tests\VTOL.Tests\VTOL.Tests.csproj", "{3F5B5F85-7B8A-474C-9CAB-53E3E7697A45}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{342223EF-C835-48F7-9FC7-614CF062E17A}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
