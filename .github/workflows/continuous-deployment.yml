@@ -41,9 +41,10 @@ jobs:
         # This is just for the behind-the-scenes server, it should not
         # effect the code itself.
         os:
-          # - "ubuntu-latest"
+          # Ubuntu required by versioning
+          - "ubuntu-latest"
           # - "macOS-latest"
-          - "windows-latest"
+          # - "windows-latest"
         # Specifies the folder where the Voxel Tycoon game will be stored in.
         library_path:
           - "libs"
@@ -78,6 +79,8 @@ jobs:
         with:
           # Large File Storage Support
           lfs: false
+          # Fetch the entire repo (used to get all versions)
+          fetch-depth: 0
       # Get all the dependency files for building from a remote repository.
       # https://github.com/marketplace/actions/checkout
       #
@@ -113,11 +116,40 @@ jobs:
         uses: actions/setup-dotnet@v1.8.2
         with:
           dotnet-version: ${{ matrix.csharp }}
+      # Install Git-Version Dependencies
+      # https://github.com/marketplace/actions/git-version#requirements
+      #
+      # Only supports: Ubuntu, Fedora, Alpine and OsX.
+      #
+      - name: Install Libevent-Dev
+        run: sudo apt-get install libevent-dev
+      # Automatically determines the semantic version based on commit messages.
+      # https://github.com/marketplace/actions/git-version
+      #
+      # tool-version     - The version of the tool to run
+      # release-branch   - The name of the master/main branch
+      # dev-branch       - The name of the development branch
+      # minor-identifier - The string used to identify a minor release
+      #                    (wrap with '/' to match using a regular expression)
+      # major-identifier - The string used to identify a major release
+      #                    (wrap with '/' to match using a regular expression)
+      # prefix           - The prefix used for the version name
+      # log-paths        - The paths used to calculate changes (comma-separated)
+      - name: Set Semantic Version
+        uses: codacy/git-version@2.5.3
+        id: git-version
+        with:
+          release-branch: main
+          dev-branch: dev
+          minor-identifier: /([fF]eature)|([mM]inor)/g
+          major-identifier: /([bB]reaking)|([mM]ajor)/g
+          # intentionally left empty - no prefix.
+          prefix:
       # Build the library
       # Using the command line build tools from .NET
       - name: Build Library
         shell: bash
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Release -property:version=${{ steps.git-version.outputs.version }}
       # Tests the library
       # Using the command line build tools from .NET
       - name: Test Library
