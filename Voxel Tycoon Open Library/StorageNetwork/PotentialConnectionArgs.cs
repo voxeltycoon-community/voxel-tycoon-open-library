@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using VoxelTycoon.Buildings;
+using VTOL.Debugging;
 
 namespace VTOL.StorageNetwork
 {
 	/// <summary>
 	/// This class is used to collect all the Siblings found by <see cref="VoxelTycoon.Buildings.StorageBuildingManager.FindSiblings(StorageNetworkBuilding)"/>
-	/// All the Connection Filter methods will receive this class as their Event Args, allowing them to alter the connections through this class.
+	/// All the Connection Filters (<see cref="IConnectionFilter.OnConnect(PotentialConnectionArgs)"/>) will receive this class as their argument, allowing them to alter the connections through this class.
 	/// </summary>
 	public class PotentialConnectionArgs
 	{
@@ -17,8 +18,11 @@ namespace VTOL.StorageNetwork
 		private Lazy<ISet<int>> _buildingIds;
 		private bool _isClosed;
 
-		internal PotentialConnectionArgs(IList<StorageBuildingSibling> siblings)
+		private ISet<int> BuildingIds => _buildingIds.Value;
+
+		internal PotentialConnectionArgs(StorageNetworkBuilding storageNetworkBuilding, IList<StorageBuildingSibling> siblings)
 		{
+			Source = storageNetworkBuilding;
 			_siblings = siblings;
 			_connections = new List<PotentialConnection>(_siblings.Count);
 			_buildingIds = new Lazy<ISet<int>>(RegisterBuildingIds);
@@ -30,6 +34,11 @@ namespace VTOL.StorageNetwork
 		}
 
 		/// <summary>
+		/// The <see cref="StorageNetworkBuilding"/> of which the connections are being filtered.
+		/// </summary>
+		public StorageNetworkBuilding Source { get; private set; }
+
+		/// <summary>
 		/// IEnumerable for cycling through the list with potential connections.
 		/// </summary>
 		public IEnumerable<PotentialConnection> Connections => _connections;
@@ -39,30 +48,34 @@ namespace VTOL.StorageNetwork
 		/// Create a connection with a building not detected by <see cref="StorageBuildingManager.FindSiblings(StorageNetworkBuilding)"/>.
 		/// </summary>
 		/// <param name="storageBuildingSibling">The <see cref="StorageBuildingSibling"/> containing the information to create a connection.</param>
-		/// <exception cref="InvalidOperationException">The potential connections have been processed or a building with a similar id is already a potential connection.</exception>
+		/// <returns>True if connection has been added, otherwise false.</returns>
 		/// <remarks>A <see cref="StorageBuildingSibling"/> can be created with <see cref="StorageNetworkUtils.CreateSiblingOf(StorageNetworkBuilding, StorageNetworkBuilding, bool)"/>.</remarks>
-		public void AddConnection(StorageBuildingSibling storageBuildingSibling)
+		public bool TryAddConnection(StorageBuildingSibling storageBuildingSibling)
 		{
 			if (_isClosed)
 			{
-				throw new InvalidOperationException("You are not allowed to add any new connections after the potential connections have been processed.");
+				throw new InvalidOperationException("You are not allowed to add a new connection after all filters have been executed.");
 			}
 			
 			int id = storageBuildingSibling.Building.Id;
 
-			if (_buildingIds.Value.Contains(id))
+			if (BuildingIds.Contains(id))
 			{
-				throw new InvalidOperationException($"Building with ID: {id} was already detected or has already been added.");
+				VtolLogger.Log($"Building {storageBuildingSibling.Building.DisplayName} with id {id} was already detected, or has already been added as a connection. Ignoring addition.");
+				
+				return false;
 			}
 
 			_addedConnections.Add(storageBuildingSibling);
-			_buildingIds.Value.Add(id);
+			BuildingIds.Add(id);
+
+			return true;
 		}
 
 		/// <summary>
 		/// Removes all the StorageBuildingSiblings that have been canceled.
 		/// </summary>
-		/// <returns>Returns a list with the StorageBuildingSiblings which are not canceled.</returns>
+		/// <returns>Returns the altered list with the StorageBuildingSiblings which haven't been canceled.</returns>
 		// ReSharper disable once ReturnTypeCanBeEnumerable.Global
 		internal IList<StorageBuildingSibling> RemoveCanceled()
 		{

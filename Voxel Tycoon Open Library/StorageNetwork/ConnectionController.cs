@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using VoxelTycoon;
 using VoxelTycoon.Buildings;
 
@@ -10,54 +11,58 @@ namespace VTOL.StorageNetwork
 	/// </summary>
 	public class ConnectionController : LazyManager<ConnectionController>
 	{
-		//We're using a SortedSet, because a SortedList uses a KeyValuePair
-		private readonly IDictionary<int, ISet<PriorityConnectionFilter>> _connectionFilters = new Dictionary<int, ISet<PriorityConnectionFilter>>();
+		private Lazy<List<PriorityConnectionFilter>> _connectionFilters = new Lazy<List<PriorityConnectionFilter>>();
+		private bool _isModified;
+
+		private List<PriorityConnectionFilter> ConnectionFilters => _connectionFilters.Value; 
 
 		/// <summary>
 		/// Registers a method which decides if a connection between two <see cref="StorageNetworkBuilding"/> should be allowed or not.
 		/// </summary>
-		/// <param name="assetId">The AssetId of one of the StorageNetworkBuildings which is part of the connection to be adjusted.</param>
-		/// <param name="connectionFilter">The method which decides if a connection should be canceled or not.</param>
-		/// <param name="priority">Filters with a higher priority can override adjustments made by filters with a lower priority.</param>
+		/// <param name="connectionFilter">The class which decides if a connection should be canceled or not.</param>
+		/// <param name="priority">(Optional) The priority of the filter. Default value is 0.</param>
 		/// <exception cref="InvalidOperationException">When trying to register while the game is done loading.</exception>
-		public void Register(int assetId, OnStorageNetworkUpdate connectionFilter, int priority = 0)
+		/// <remarks>Filters with a higher priority will be executed after filters with a lower priority. Meaning the alterations made by a filter with a higher priority cannot be overwritten by a filter with a lower priority.</remarks>
+		public void RegisterConnectionFilter(IConnectionFilter connectionFilter, double priority = 0)
 		{
 			if (Vtol.GameState > GameStates.OnGameStarting)
 			{
 				throw new InvalidOperationException($"You are not allowed to register after state OnGameStarting. The current state is {Vtol.GameState}.");
 			}
 
-			PriorityConnectionFilter priorityListener = new PriorityConnectionFilter(assetId, connectionFilter, priority);
+			PriorityConnectionFilter priorityListener = new PriorityConnectionFilter(connectionFilter, priority);
 
-			AddListener(assetId, priorityListener);
+			ConnectionFilters.Add(priorityListener);
+			_isModified = true;
 		}
 
 		/// <summary>
-		/// Tries to get all the listeners associated with the specified AssetId.
+		/// Gets all the connection filters.
 		/// </summary>
-		/// <param name="assetId">The specified AssetId</param>
-		/// <param name="connectionFilters">The list with all listeners. <code>Null</code> if none are found.</param>
-		/// <returns>True if listeners are registered with specified AssetId. Otherwise false.</returns>
-		internal bool TryGetConnectionFilters(int assetId, out ISet<PriorityConnectionFilter> connectionFilters) => _connectionFilters.TryGetValue(assetId, out connectionFilters);
-
-		/// <summary>
-		/// Adds a listener to the dictionary with specified AssetId.
-		/// </summary>
-		/// <param name="assetId">The AssetId of one of the StorageNetworkBuildings which is part of the connection to be adjusted.</param>
-		/// <param name="connectionFilter">The method which decides if a connection should be allowed.</param>
-		private void AddListener(int assetId, PriorityConnectionFilter connectionFilter)
+		/// <param name="connectionFilters">The list with all connection filters.</param>
+		/// <returns>True if there are any filters registered, otherwise false.</returns>
+		internal bool GetConnectionFilters(out IList<PriorityConnectionFilter> connectionFilters)
 		{
-			if (!_connectionFilters.TryGetValue(assetId, out ISet<PriorityConnectionFilter> connectionFilters))
+			connectionFilters = ConnectionFilters;
+
+			if (!_connectionFilters.IsValueCreated)
 			{
-				connectionFilters = _connectionFilters[assetId] = new SortedSet<PriorityConnectionFilter>();
+				return false;
 			}
-			
-			connectionFilters.Add(connectionFilter);
+
+			TrySort();
+
+			return true;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private void TrySort()
+		{
+			if (_isModified)
+			{
+				ConnectionFilters.Sort();
+				_isModified = false;
+			}
 		}
 	}
-
-	/// <summary>
-	/// The delegate to store the methods which decide if a connection should be allowed.
-	/// </summary>
-	public delegate void OnStorageNetworkUpdate(PotentialConnectionArgs potentialConnections);
 }
