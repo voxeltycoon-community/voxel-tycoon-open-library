@@ -28,6 +28,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Reflection\NotAccessibleException.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Reflection\NewFile1.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
