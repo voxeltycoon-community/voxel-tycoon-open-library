@@ -1,0 +1,13 @@
+{
+  "stryker-config": {
+    "solution": "./Voxel Tycoon Open Library.sln",
+    "project": "Voxel Tycoon Open Library.csproj",
+    "test-projects": [
+      "./tests/VTOL.Tests/VTOL.Tests.csproj"
+    ],
+    "language-version": "CSharp7_3",
+    "target-framework": "netstandard2.0",
+
+    "coverage-analysis": "all" 
+  } 
+}
