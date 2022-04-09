@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Reflection;
 
+using JetBrains.Annotations;
+
 using NUnit.Framework;
 
 using VTOL.Utils;
@@ -10,41 +12,45 @@ namespace VTOL.Reflection
 {
 	/// <summary>
 	/// This class holds test cases for <see cref="ReflectionHelpers"/>. The main purpose of <see cref="ReflectionHelpers"/> is to make reflection more accessible.
-	/// This class is devided over 2 files, one which holds tests that only run tests on internal created test classes and another file which runs tests on
-	/// external voxel tycoon classes. 
 	/// </summary>
+	// This class is devided over 2 files, one (ReflectionHelperTests (internal).cs) which holds tests that only run tests on internal created test classes.
+	// The other file (ReflectionHelperTests (external).cs) runs tests on external voxel tycoon classes.
+
+	// --- This is the internal testing part ---
 	[TestFixture]
 	internal partial class ReflectionHelpersTests
 	{
+		private static IEnumerable<object[]> ThrowExceptionTestCaseSource
+		{
+			get
+			{
+				yield return new object[] { null             , "_myPrivateInteger", typeof(TargetException) };
+				yield return new object[] { new ParentClass(), "_myField"         , typeof(MemberNotFoundException) };
+				yield return new object[] { new ParentClass(), null               , typeof(ArgumentNullException) };
+			}
+		}
+
 		#region -- GetPrivateFieldValue --
 
 		#region - Exception Testing -
 
 		[Test]
-		public void GetPrivateFieldValue_ThrowsException_WithNoObject()
+		[TestCaseSource(nameof(ThrowExceptionTestCaseSource))]
+		public void GetPrivateFieldValue_ThrowException_WithTestCaseSource(
+			ParentClass instance,
+			string fieldName,
+			Type exceptionType
+			)
 		{
 			//Arrange
-			ParentClass parentClass = null;
+			//Arrangement done in the parameters through TestCaseSource
 
 			//Assert
-			Assert.Catch<TargetException>(
-				() => parentClass.GetPrivateFieldValue<int, ParentClass>("_myPrivateInteger")
-			);
+			Assert.Catch(exceptionType, () => instance.GetPrivateFieldValue<int, ParentClass>(fieldName));
 		}
-
+		
 		[Test]
-		public void GetPrivateFieldValue_ThrowsException_WithNoFieldName()
-		{
-			//Arrange
-			ParentClass parentClass = new ParentClass();
-
-			//Assert
-			Assert.Catch<ArgumentNullException>(
-				() => parentClass.GetPrivateFieldValue<int, ParentClass>(null));
-		}
-
-		[Test]
-		public void GetPrivateFieldValue_ThrowsException_TypeMismatch()
+		public void GetPrivateFieldValue_ThrowException_TypeMismatch()
 		{
 			//Arrange
 			ParentClass parentClass = new ParentClass();
@@ -52,18 +58,6 @@ namespace VTOL.Reflection
 			//Assert
 			Assert.Catch<TypeMismatchException>(
 				() => parentClass.GetPrivateFieldValue<string, ParentClass>("_myPrivateInteger")
-			);
-		}
-
-		[Test]
-		public void GetPrivateFieldValue_ThrowsException_FieldDoesNotExist()
-		{
-			//Arrange
-			ParentClass parentClass = new ParentClass();
-
-			//Assert
-			Assert.Catch<MemberNotFoundException>(
-				() => parentClass.GetPrivateFieldValue<string, ParentClass>("_myField")
 			);
 		}
 
@@ -105,7 +99,7 @@ namespace VTOL.Reflection
 		)
 		{
 			// Arrange
-			/* Arrangement done in the parameters. */
+			// Arrangement done in the parameters through TestCaseSource
 
 			// Act
 			int actualValue = instance.GetPrivateFieldValue<int, ParentClass>(fieldName);
@@ -138,7 +132,7 @@ namespace VTOL.Reflection
 		)
 		{
 			// Arrange
-			/* Arrangement done in the parameters. */
+			// Arrangement done in the parameters through TestCaseSource
 
 			// Act
 			int actualValue = instance.GetPrivateFieldValue<int, SubClassB>(fieldName);
@@ -156,29 +150,22 @@ namespace VTOL.Reflection
 		#region - Exception Testing -
 
 		[Test]
-		public void SetPrivateFieldValue_ThrowsException_WithNoObject()
+		[TestCaseSource(nameof(ThrowExceptionTestCaseSource))]
+		public void SetPrivateFieldValue_ThrowException_WithTestCaseSource(
+			ParentClass instance,
+			string fieldName,
+			Type exceptionType
+			)
 		{
 			//Arrange
-			ParentClass parentClass = null;
+			//Arrangement done in the parameters through TestCaseSource
 
 			//Assert
-			Assert.Catch<TargetException>(
-				() => parentClass.SetPrivateFieldValue("_myPrivateInteger", 1));
+			Assert.Catch(exceptionType, () => instance.SetPrivateFieldValue(fieldName, 1));
 		}
 
 		[Test]
-		public void SetPrivateFieldValue_ThrowsException_WithNoFieldName()
-		{
-			//Arrange
-			ParentClass parentClass = new ParentClass();
-
-			//Assert
-			Assert.Catch<ArgumentNullException>(
-				() => parentClass.SetPrivateFieldValue(null, 1));
-		}
-
-		[Test]
-		public void SetPrivateFieldValue_ThrowsException_TypeMismatch()
+		public void SetPrivateFieldValue_ThrowException_TypeMismatch()
 		{
 			//Arrange
 			ParentClass parentClass = new ParentClass();
@@ -186,17 +173,6 @@ namespace VTOL.Reflection
 			//Assert
 			Assert.Catch<TypeMismatchException>(
 				() => parentClass.SetPrivateFieldValue("_myPrivateInteger", "myString"));
-		}
-
-		[Test]
-		public void SetPrivateFieldValue_ThrowsException_FieldDoesNotExist()
-		{
-			//Arrange
-			ParentClass parentClass = new ParentClass();
-
-			//Assert
-			Assert.Catch<MemberNotFoundException>(
-				() => parentClass.SetPrivateFieldValue("_myField", 1));
 		}
 
 		#endregion
@@ -283,7 +259,7 @@ namespace VTOL.Reflection
 
 		#endregion
 
-		#region GetPropertyValue
+		#region -- GetPropertyValue --
 
 		#region - Exception Testing -
 
@@ -299,7 +275,7 @@ namespace VTOL.Reflection
 
 		#endregion
 
-		#region SetPropertyValue
+		#region -- SetPropertyValue --
 
 		#region - Exception Testing -
 
@@ -325,10 +301,10 @@ namespace VTOL.Reflection
 			public static int MyStaticInteger { get; private set; }
 
 			protected int myProtectedInteger = 20;
-			private int _myPrivateInteger = 30; //Is not directly referred to, but is used in TestCaseSources
+			[UsedImplicitly] private int _myPrivateInteger = 30; //Is not directly referred to, but is used in TestCaseSources
 
 			protected static int protectedStaticInteger = 200;
-			private static int _privateStaticInteger = 300; //Is not directly referred to, but is used in TestCaseSources
+			[UsedImplicitly] private static int _privateStaticInteger = 300; //Is not directly referred to, but is used in TestCaseSources
 		}
 
 		public class SubClassA : ParentClass
@@ -339,10 +315,10 @@ namespace VTOL.Reflection
 		public class SubClassB : ParentClass
 		{
 			protected static new int protectedStaticInteger = 800;
-			private static int _privateStaticInteger = 700; //Is not directly referred to, but is used in TestCaseSources
+			[UsedImplicitly] private static int _privateStaticInteger = 700; //Is not directly referred to, but is used in TestCaseSources
 
 			protected new int myProtectedInteger = 80;
-			private int _myPrivateInteger = 70; //Is not directly referred to, but is used in TestCaseSources
+			[UsedImplicitly] private int _myPrivateInteger = 70; //Is not directly referred to, but is used in TestCaseSources
 
 			public new int MyInteger { get; }
 
@@ -350,64 +326,5 @@ namespace VTOL.Reflection
 		}
 
 		#endregion
-
-
-		/*
-		[Test]
-        public void SetReadOnlyProperty_ThrowsException_WithNoObject()
-        {
-            //Arrange
-            SubClassA subClass = null;
-
-            //Assert
-            Assert.Catch<ArgumentNullException>(() => subClass.SetReadOnlyProperty("MyInteger", 10));
-        }
-
-        [Test]
-        public void SetReadOnlyProperty_ThrowsException_WithNoPropertyName()
-        {
-            //Arrange
-            SubClassA subClass = new SubClassA();
-
-            //Assert
-            Assert.Catch<ArgumentNullException>(() => subClass.SetReadOnlyProperty(null, 10));
-        }
-
-        [Test]
-        public void SetReadOnlyProperty_ThrowsException_PropertyIsNotAssignable()
-        {
-            //Arrange
-            SubClassA subClass = new SubClassA();
-
-            //Assert
-            Assert.Catch<ArgumentException>(() => subClass.SetReadOnlyProperty("MyInteger", "myString"));
-        }
-
-        [Test]
-        public void SetReadOnlyPropertyWithSubClassHidingProperty_ThrowsException_WithNoSetAccessor()
-        {
-            //Arrange
-            SubClassB subClass = new SubClassB();
-
-            //Assert
-            Assert.Catch<ArgumentNullException>(() => subClass.SetReadOnlyProperty("MyInteger", 10));
-        }
-
-        [Test]
-        public void SetReadOnlyProperty_SetValue_WithGivenValue()
-        {
-            //Arrange
-            int expected = 10;
-            SubClassA subClass = new SubClassA();
-
-            //Act
-            subClass.SetReadOnlyProperty("MyInteger", expected);
-            int actual = subClass.MyInteger;
-
-            //Assert
-            Assert.AreEqual(expected, actual);
-        }
-		*/
-
 	}
 }
