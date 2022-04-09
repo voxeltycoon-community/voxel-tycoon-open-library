@@ -1,9 +1,9 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-using VTOL.Reflection;
+using NUnit.Framework;
+
 using VTOL.Utils;
 
 namespace VTOL.Reflection
@@ -151,20 +151,172 @@ namespace VTOL.Reflection
 
 		#endregion
 
-		#region SetPrivateFieldValue
+		#region -- SetPrivateFieldValue --
+
+		#region - Exception Testing -
+
+		[Test]
+		public void SetPrivateFieldValue_ThrowsException_WithNoObject()
+		{
+			//Arrange
+			ParentClass parentClass = null;
+
+			//Assert
+			Assert.Catch<TargetException>(
+				() => parentClass.SetPrivateFieldValue("_myPrivateInteger", 1));
+		}
+
+		[Test]
+		public void SetPrivateFieldValue_ThrowsException_WithNoFieldName()
+		{
+			//Arrange
+			ParentClass parentClass = new ParentClass();
+
+			//Assert
+			Assert.Catch<ArgumentNullException>(
+				() => parentClass.SetPrivateFieldValue(null, 1));
+		}
+
+		[Test]
+		public void SetPrivateFieldValue_ThrowsException_TypeMismatch()
+		{
+			//Arrange
+			ParentClass parentClass = new ParentClass();
+
+			//Assert
+			Assert.Catch<TypeMismatchException>(
+				() => parentClass.SetPrivateFieldValue("_myPrivateInteger", "myString"));
+		}
+
+		[Test]
+		public void SetPrivateFieldValue_ThrowsException_FieldDoesNotExist()
+		{
+			//Arrange
+			ParentClass parentClass = new ParentClass();
+
+			//Assert
+			Assert.Catch<MemberNotFoundException>(
+				() => parentClass.SetPrivateFieldValue("_myField", 1));
+		}
+
+		#endregion
+
+		#region - Success Testing -
+
+		private static IEnumerable<object[]> SetPrivateFieldValue_GetExpectedValue_CasesParent
+		{
+			get
+			{
+				// === Always about SetPrivateFieldValue<ParentClass>(...) ===
+
+				// Static field with instance value.
+				yield return new object[] { new ParentClass(), "_privateStaticInteger" };
+				yield return new object[] { new ParentClass(), "protectedStaticInteger" };
+				// Static field with null object.
+				yield return new object[] { null, "_privateStaticInteger" };
+				yield return new object[] { null, "protectedStaticInteger" };
+
+				// Instance field with instance value.
+				yield return new object[] { new ParentClass(), "_myPrivateInteger" };
+				yield return new object[] { new ParentClass(), "myProtectedInteger" };
+				// Instance field with sub instance value.
+				yield return new object[] { new SubClassA(), "_myPrivateInteger" };
+				yield return new object[] { new SubClassA(), "myProtectedInteger" };
+				// Instance field with sub instance value and new implementation.
+				yield return new object[] { new SubClassB(), "_myPrivateInteger" };
+				yield return new object[] { new SubClassB(), "myProtectedInteger" };
+			}
+		}
+
+		[Test]
+		[TestCaseSource(nameof(SetPrivateFieldValue_GetExpectedValue_CasesParent))]
+		public void SetPrivateFieldValue_GetExpectedValue_WithParentClassSource(
+			ParentClass instance,
+			string fieldName
+			)
+		{
+			//Arrange
+			int expectedValue = 1;
+
+			//Act
+			instance.SetPrivateFieldValue(fieldName, expectedValue);
+			int actualValue = instance.GetPrivateFieldValue<int, ParentClass>(fieldName);
+
+			//Assert
+			Assert.AreEqual(expectedValue, actualValue);
+		}
+
+		private static IEnumerable<object[]> SetPrivateFieldValue_GetExpectedValue_CasesSubB
+		{
+			get
+			{
+				// === Always about SetPrivateFieldValue<SubClassB>(...) ===
+
+				// Instance field with sub instance value and new implementation.
+				yield return new object[] { new SubClassB(), "myProtectedInteger" };
+				yield return new object[] { new SubClassB(), "_myPrivateInteger" };
+				// Static field with sub instance value and new implementation.
+				yield return new object[] { new SubClassB(), "protectedStaticInteger" };
+				yield return new object[] { new SubClassB(), "_privateStaticInteger" };
+			}
+		}
+
+		[Test]
+		[TestCaseSource(nameof(SetPrivateFieldValue_GetExpectedValue_CasesSubB))]
+		public void SetPrivateFieldValue_GetExpectedValue_WithSubClassBSource(
+			SubClassB instance,
+			string fieldName
+			)
+		{
+			//Arrange
+			int expectedValue = 1;
+
+			//Act
+			instance.SetPrivateFieldValue(fieldName, expectedValue);
+			int actualValue = instance.GetPrivateFieldValue<int, SubClassB>(fieldName);
+
+			//Assert
+			Assert.AreEqual(expectedValue, actualValue);
+		}
+
+		#endregion
 
 		#endregion
 
 		#region GetPropertyValue
 
+		#region - Exception Testing -
+
+
+
+		#endregion
+
+		#region - Success Testing -
+
+
+
+		#endregion
+
 		#endregion
 
 		#region SetPropertyValue
 
+		#region - Exception Testing -
+
+
+
+		#endregion
+
+		#region - Success Testing -
+
+
+
+		#endregion
+
 		#endregion
 
 		#region Test Classes
-		//These classes are used for simulation a realistic situation towards test cases.
+		//These classes are used for simulating a realistic situation towards test cases.
 
 		public class ParentClass
 		{
@@ -173,10 +325,10 @@ namespace VTOL.Reflection
 			public static int MyStaticInteger { get; private set; }
 
 			protected int myProtectedInteger = 20;
-			private int _myPrivateInteger = 30;
+			private int _myPrivateInteger = 30; //Is not directly referred to, but is used in TestCaseSources
 
 			protected static int protectedStaticInteger = 200;
-			private static int _privateStaticInteger = 300;
+			private static int _privateStaticInteger = 300; //Is not directly referred to, but is used in TestCaseSources
 		}
 
 		public class SubClassA : ParentClass
@@ -187,10 +339,10 @@ namespace VTOL.Reflection
 		public class SubClassB : ParentClass
 		{
 			protected static new int protectedStaticInteger = 800;
-			private static int _privateStaticInteger = 700;
+			private static int _privateStaticInteger = 700; //Is not directly referred to, but is used in TestCaseSources
 
 			protected new int myProtectedInteger = 80;
-			private int _myPrivateInteger = 70;
+			private int _myPrivateInteger = 70; //Is not directly referred to, but is used in TestCaseSources
 
 			public new int MyInteger { get; }
 
