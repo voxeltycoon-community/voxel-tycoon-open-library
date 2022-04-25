@@ -15,18 +15,20 @@ namespace VTOL.Reflection
 	{
 
 		private static BindingFlags _fieldFlags = 
-			BindingFlags.Instance | 
-			BindingFlags.Static | 
-			BindingFlags.NonPublic | 
-			BindingFlags.FlattenHierarchy;
+			BindingFlags.Instance  |       // Provides instance / object properties.
+			BindingFlags.Static    |       // Provides static properties.
+			BindingFlags.NonPublic |       // Provides private and protected properties.
+			BindingFlags.FlattenHierarchy; // Allows parent / inherited static values to be accessed.
 
 		private static BindingFlags _propertyFlags =
-			BindingFlags.Instance |
-			BindingFlags.Static |
-			BindingFlags.NonPublic |
-			BindingFlags.Public;
+			BindingFlags.Instance  |       // Provides instance / object properties.
+			BindingFlags.Static    |       // Provides static properties.
+			BindingFlags.NonPublic |       // Provides private and protected properties.
+			BindingFlags.Public    |       // Provides public properties with private getters / setters.
+			BindingFlags.FlattenHierarchy; // Allows parent / inherited static values to be accessed.
 
 
+		#region GetFieldInfo()
 		/// <summary>
 		/// Gets the <see cref="FieldInfo"/> of a field within a class.
 		/// </summary>
@@ -64,7 +66,8 @@ namespace VTOL.Reflection
 			// If the field is not present then it never existed and the user
 			// might have written the field incorrectly or the implementation
 			// has changed since the moment of definition.
-			if (fieldInfo == null) return null;
+			if (fieldInfo == null)
+				return null;
 			// When we have the field, we make sure that the return type
 			// is of the type which we expect (is it a string, bool, etc.)
 			// If this is not the right type then the user has given us
@@ -83,7 +86,9 @@ namespace VTOL.Reflection
 			// which is what the user wanted then it can finally be returned.
 			return fieldInfo;
 		}
+		#endregion
 
+		#region GetPropertyMethod
 		/// <summary>
 		/// Gets the <see cref="PropertyInfo"/> of a property within a class.
 		/// </summary>
@@ -121,7 +126,8 @@ namespace VTOL.Reflection
 			// If the property is not present then it never existed and the
 			// user might have written the property incorrectly or the
 			// implementation has changed since the moment of definition.
-			if (propertyInfo == null) return null;
+			if (propertyInfo == null)
+				return null;
 			// When we have the property, we make sure that the return type
 			// is of the type which we expect (is it a string, bool, etc.)
 			// If this is not the right type then the user has given us
@@ -186,7 +192,7 @@ namespace VTOL.Reflection
 			// a getter or with only a setter.
 			return propMethod;
 		}
-
+		#endregion
 
 		/// <summary>
 		/// Gets the value of a private field.
@@ -338,14 +344,14 @@ namespace VTOL.Reflection
 			FieldInfo backingField = GetFieldInfo<TReturn>(
 				typeof(TInstance),
 				$"<{propertyName}>k__BackingField",
-				isGetter: false
+				isGetter: true
 			);
 			if (backingField == null)
 			{
 				throw new MemberNotFoundException(
 					$"No accessible getter could be found for the property '{nameof(propertyName)}'. "
 					+  "This can happen when the provided property only has a self-implemented setter. "
-					+ $"For more information, you can decompile the '{typeof(TInstance).Name}' class "
+					+ $"For more information, you can decompile the '{typeof(TInstance).Name}' class, "
 					+  "or check the comments for this method."
 				);
 			}
@@ -440,6 +446,7 @@ namespace VTOL.Reflection
 					+ "or check the comments for this method."
 				);
 			}
+			propertyField.SetValue(obj, value);
 
 			return obj;
 		}

@@ -14,7 +14,7 @@ namespace VTOL.Reflection
 	// This class is devided over 2 files, one (ReflectionHelperTests (internal).cs) which holds tests that only run tests on internal created test classes.
 	// The other file (ReflectionHelperTests (external).cs) runs tests on external voxel tycoon classes.
 
-	// --- This is the external testing part ---
+	// --- This is the external testing section ---
 	[TestFixture]
 	internal partial class ReflectionHelpersTests
 	{
