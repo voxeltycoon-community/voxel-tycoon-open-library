@@ -19,22 +19,13 @@ namespace VTOL.StorageNetwork.ConnectionManager
 		/// <summary>
 		/// Registers a <see cref="IConnectionFilter"/> to the connection filter system.
 		/// </summary>
-		/// <typeparam name="TFilter">Type of class which holds the <see cref="IConnectionFilter"/> fucntionality.</typeparam>
+		/// <typeparam name="TFilter">Type of class which holds the <see cref="IConnectionFilter"/> functionality.</typeparam>
 		/// <param name="priority">(Optional) The priority of the filter. Default value is 0.</param>
 		/// <exception cref="InvalidOperationException">When trying to register while the game is done loading.</exception>
 		/// <remarks>Filters with a higher priority will be executed after filters with a lower priority. Meaning the alterations made by a filter with a higher priority cannot be overwritten by a filter with a lower priority.</remarks>
 		public void RegisterConnectionFilter<TFilter>(double priority = 0)
-			where TFilter : IConnectionFilter, new()
-		{
-			try
-			{
-				RegisterConnectionFilter(new TFilter(), priority);
-			}
-			catch (InvalidOperationException)
-			{
-				throw new InvalidOperationException($"You are not allowed to register after state OnGameStarting. The current state is {Vtol.GameState}.");
-			}
-		}
+			where TFilter : IConnectionFilter, new() 
+			=> RegisterConnectionFilter(new TFilter(), priority);
 
 		private void RegisterConnectionFilter(IConnectionFilter connectionFilter, double priority = 0)
 		{
