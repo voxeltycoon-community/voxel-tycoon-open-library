@@ -14,6 +14,9 @@ workshop/mod.json
 # Hide all dlls as they will automatically be placed in the workshop folder
 # when building our application using Visual Studio.
 workshop/*.dll
+# Stryker tests our test-methods by creating bugs and will find, based on code changes, if all created bugs are caught by the test-methods.
+# The reports of these tests will be placed in the StrykerOutput-folder.
+StrykerOutput/
 
 ### Csharp ###
 ## Ignore Visual Studio temporary files, build results, and
