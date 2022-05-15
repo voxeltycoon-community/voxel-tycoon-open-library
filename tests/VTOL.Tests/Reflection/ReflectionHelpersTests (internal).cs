@@ -308,8 +308,8 @@ namespace VTOL.Reflection
 				yield return new object[] { new PropertySubClassA(), nameof(PropertySubClassA.MyPrivateGetInteger), 10 };
 				yield return new object[] { new PropertySubClassA(), nameof(PropertySubClassA.MyPrivateSetInteger), 20 };
 				yield return new object[] { new PropertySubClassA(), nameof(PropertySubClassA.MyGetInteger), 30 };
-				yield return new object[] { new PropertySubClassA(), nameof(PropertySubClassA.MyStaticPrivateGetInteger), 40 };
-				yield return new object[] { new PropertySubClassA(), nameof(PropertySubClassA.MyStaticPrivateSetInteger), 50 };
+				yield return new object[] { new PropertySubClassA(), nameof(PropertyParentClass.MyStaticPrivateGetInteger), 40 };
+				yield return new object[] { new PropertySubClassA(), nameof(PropertyParentClass.MyStaticPrivateSetInteger), 50 };
 
 				// See test case 'SetPropertyValue_EnsureNoBleeding_WhenGetAndSet'
 				// yield return new object[] { new PropertySubClassA(), nameof(PropertySubClassA.MyStaticGetInteger), 60 };
@@ -402,7 +402,7 @@ namespace VTOL.Reflection
 			// Arrangement done in the parameters through TestCaseSource
 
 			// Assert
-			Assert.Catch(exceptionType, () => instance.SetPropertyValue<int, PropertyParentClass>(fieldName, 1));
+			Assert.Catch(exceptionType, () => instance.SetPropertyValue(fieldName, 1));
 		}
 
 		#endregion
@@ -453,7 +453,7 @@ namespace VTOL.Reflection
 
 			// Act
 			instance.SetPropertyValue<int, PropertyParentClass>("NonBackedSetterInteger", expectedValue);
-			int actualValue = instance.SecretNonBackedField;
+			int actualValue = instance.secretNonBackedField;
 
 			// Assert
 			Assert.AreEqual(expectedValue, actualValue);
@@ -468,7 +468,7 @@ namespace VTOL.Reflection
 			int expectedValue = 1;
 
 			// Act
-			instance = instance.SetPropertyValue<int, ReflectionStruct>(propertyName, expectedValue);
+			instance = instance.SetPropertyValue(propertyName, expectedValue);
 			int actualValue = instance.GetPropertyValue<int, ReflectionStruct>(propertyName);
 
 			// Assert
@@ -490,8 +490,8 @@ namespace VTOL.Reflection
 		/// caching but we are unsure how to fix it, and because of the rarity
 		/// of this scenario we instead leave it as unsupported for now.
 		/// </summary>
-		// [Test]
-		public static void SetPropertyValue_EnsureNoBleeding_WhenGetAndSet() {
+		[Ignore("Unsolved bug")]
+		public void SetPropertyValue_EnsureNoBleeding_WhenGetAndSet() {
 			PropertySubClassB instance = new PropertySubClassB();
 			string propertyName = nameof(PropertySubClassB.MyStaticGetInteger);
 			int originalValue = 600;
@@ -500,7 +500,7 @@ namespace VTOL.Reflection
 			int preSetValue = instance.GetPropertyValue<int, PropertySubClassB>(propertyName);
 			Assert.AreEqual(originalValue, preSetValue);
 
-			instance.SetPropertyValue<int, PropertySubClassB>(propertyName, replacedValue);
+			instance.SetPropertyValue(propertyName, replacedValue);
 			int postSetValue = instance.GetPropertyValue<int, PropertySubClassB>(propertyName);
 			Assert.AreEqual(replacedValue, postSetValue);
 		}
@@ -514,10 +514,10 @@ namespace VTOL.Reflection
 
 		public class FieldParentClass
 		{
-			protected int myProtectedInteger = 20;
+			[UsedImplicitly] protected int myProtectedInteger = 20;
 			[UsedImplicitly] private int _myPrivateInteger = 30; //Is not directly referred to, but is used in TestCaseSources
 
-			protected static int protectedStaticInteger = 200;
+			[UsedImplicitly] protected static int protectedStaticInteger = 200;
 			[UsedImplicitly] private static int _privateStaticInteger = 300; //Is not directly referred to, but is used in TestCaseSources
 
 			[UsedImplicitly] private string _differentTypedField = "I am an int!"; //Is not directly referred to, but is used in TestCaseSources
@@ -530,10 +530,10 @@ namespace VTOL.Reflection
 
 		public class FieldSubClassB : FieldParentClass
 		{
-			protected static new int protectedStaticInteger = 800;
+			[UsedImplicitly] protected static new int protectedStaticInteger = 800;
 			[UsedImplicitly] private static int _privateStaticInteger = 700; //Is not directly referred to, but is used in TestCaseSources
 
-			protected new int myProtectedInteger = 80;
+			[UsedImplicitly] protected new int myProtectedInteger = 80;
 			[UsedImplicitly] private int _myPrivateInteger = 70; //Is not directly referred to, but is used in TestCaseSources
 		}
 
@@ -552,15 +552,15 @@ namespace VTOL.Reflection
 				MyStaticPrivateSetInteger = 50;
 			}
 
-			public int SecretNonBackedField;
+			public int secretNonBackedField;
 
 			public int MyPrivateGetInteger { private get; set; }
 			public int MyPrivateSetInteger { get; private set; }
 			public int MyGetInteger { get; }
-			private int NonBackedGetterInteger => 70;
-			private int NonBackedSetterInteger
+			[UsedImplicitly] private int NonBackedGetterInteger => 70;
+			[UsedImplicitly] private int NonBackedSetterInteger
 			{
-				set => SecretNonBackedField = value;
+				set => secretNonBackedField = value;
 			}
 
 			public string DifferentTypedProperty { get; set; } = "I am an int!";
@@ -591,9 +591,9 @@ namespace VTOL.Reflection
 			public new int MyPrivateGetInteger { private get; set; }
 			public new int MyPrivateSetInteger { get; private set; }
 			public new int MyGetInteger { get; }
-			public new static int MyStaticPrivateGetInteger { private get; set; }
-			public new static int MyStaticPrivateSetInteger { get; private set; }
-			public new static int MyStaticGetInteger { get; } = 600;
+			public static new int MyStaticPrivateGetInteger { private get; set; }
+			public static new int MyStaticPrivateSetInteger { get; private set; }
+			public static new int MyStaticGetInteger { get; } = 600;
 		}
 
 		#endregion
