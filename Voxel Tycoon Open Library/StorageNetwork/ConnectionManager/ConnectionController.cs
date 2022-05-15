@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using VoxelTycoon;
 using VoxelTycoon.Buildings;
 
-namespace VTOL.StorageNetwork
+namespace VTOL.StorageNetwork.ConnectionManager
 {
 	/// <summary>
 	/// This class provides methods to allow for adjusting Storage Network connections.
@@ -14,20 +14,24 @@ namespace VTOL.StorageNetwork
 		private Lazy<List<PriorityConnectionFilter>> _connectionFilters = new Lazy<List<PriorityConnectionFilter>>();
 		private bool _isModified;
 
-		private List<PriorityConnectionFilter> ConnectionFilters => _connectionFilters.Value; 
+		private List<PriorityConnectionFilter> ConnectionFilters => _connectionFilters.Value;
 
 		/// <summary>
-		/// Registers a method which decides if a connection between two <see cref="StorageNetworkBuilding"/> should be allowed or not.
+		/// Registers a <see cref="IConnectionFilter"/> to the connection filter system.
 		/// </summary>
-		/// <param name="connectionFilter">The class which decides if a connection should be canceled or not.</param>
+		/// <typeparam name="TFilter">Type of class which holds the <see cref="IConnectionFilter"/> functionality.</typeparam>
 		/// <param name="priority">(Optional) The priority of the filter. Default value is 0.</param>
 		/// <exception cref="InvalidOperationException">When trying to register while the game is done loading.</exception>
 		/// <remarks>Filters with a higher priority will be executed after filters with a lower priority. Meaning the alterations made by a filter with a higher priority cannot be overwritten by a filter with a lower priority.</remarks>
-		public void RegisterConnectionFilter(IConnectionFilter connectionFilter, double priority = 0)
+		public void RegisterConnectionFilter<TFilter>(double priority = 0)
+			where TFilter : IConnectionFilter, new() 
+			=> RegisterConnectionFilter(new TFilter(), priority);
+
+		private void RegisterConnectionFilter(IConnectionFilter connectionFilter, double priority = 0)
 		{
 			if (Vtol.GameState > GameStates.OnGameStarting)
 			{
-				throw new InvalidOperationException($"You are not allowed to register after state OnGameStarting. The current state is {Vtol.GameState}.");
+				throw new InvalidOperationException();
 			}
 
 			PriorityConnectionFilter priorityListener = new PriorityConnectionFilter(connectionFilter, priority);
