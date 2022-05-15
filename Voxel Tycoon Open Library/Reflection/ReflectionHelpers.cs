@@ -268,8 +268,10 @@ namespace VTOL.Reflection
 				throw new MemberNotFoundException(fieldName, typeof(TInstance));
 			}
 
-			fieldInfo.SetValue(obj, value);
-			return obj;
+			// Boxing to support field changes in value-types (structs).
+			object boxedInstance = obj;
+			fieldInfo.SetValue(boxedInstance, value);
+			return (TInstance) boxedInstance;
 		}
 
 
@@ -397,6 +399,9 @@ namespace VTOL.Reflection
 			[CanBeNull] TValue value
 		)
 		{
+			// Boxing to support property changes in value-types (structs).
+			object boxedInstance = obj;
+
 			//
 			// When a property is defined and it contains a setter,
 			// then this will retrieve the setter as a method.
@@ -416,8 +421,8 @@ namespace VTOL.Reflection
 				isGetter: false
 			);
 			if (propertyMethod != null) {
-				propertyMethod.Invoke(obj, new object[] { value });
-				return obj;
+				propertyMethod.Invoke(boxedInstance, new object[] { value });
+				return (TInstance) boxedInstance;
 			}
 
 			//
@@ -446,9 +451,9 @@ namespace VTOL.Reflection
 					+ "or check the comments for this method."
 				);
 			}
-			propertyField.SetValue(obj, value);
 
-			return obj;
+			propertyField.SetValue(boxedInstance, value);
+			return (TInstance) boxedInstance;
 		}
 
 	}

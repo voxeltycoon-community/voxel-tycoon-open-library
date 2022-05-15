@@ -223,6 +223,22 @@ namespace VTOL.Reflection
 			Assert.AreEqual(expectedValue, actualValue);
 		}
 
+		[Test]
+		public void SetPrivateFieldValue_GetExpectedValue_CaseStruct()
+		{
+			// Arrange
+			const string fieldName = "_myPrivateInt";
+			ReflectionStruct instance = new ReflectionStruct();
+			int expectedValue = 1;
+
+			// Act
+			instance = instance.SetPrivateFieldValue(fieldName, expectedValue);
+			int actualValue = instance.GetPrivateFieldValue<int, ReflectionStruct>(fieldName);
+
+			// Assert
+			Assert.AreEqual(expectedValue, actualValue);
+		}
+
 		private static IEnumerable<object[]> SetPrivateFieldValue_GetExpectedValue_CasesSubB
 		{
 			get
@@ -442,6 +458,22 @@ namespace VTOL.Reflection
 			// Assert
 			Assert.AreEqual(expectedValue, actualValue);
 		}
+		
+		[Test]
+		public void SetPropertyValue_GetExpectedValue_CaseStruct()
+		{
+			// Arrange
+			const string propertyName = "MyIntProperty";
+			ReflectionStruct instance = new ReflectionStruct();
+			int expectedValue = 1;
+
+			// Act
+			instance = instance.SetPropertyValue<int, ReflectionStruct>(propertyName, expectedValue);
+			int actualValue = instance.GetPropertyValue<int, ReflectionStruct>(propertyName);
+
+			// Assert
+			Assert.AreEqual(expectedValue, actualValue);
+		}
 
 		#endregion
 
@@ -475,7 +507,7 @@ namespace VTOL.Reflection
 
 		#endregion
 
-		#region -- Test Classes --
+		#region -- Test Classes / Structs --
 		// These classes are used for simulating a realistic situation towards test cases.
 
 		#region - Field Testing Classes -
@@ -562,6 +594,16 @@ namespace VTOL.Reflection
 			public new static int MyStaticPrivateGetInteger { private get; set; }
 			public new static int MyStaticPrivateSetInteger { get; private set; }
 			public new static int MyStaticGetInteger { get; } = 600;
+		}
+
+		#endregion
+
+		#region - Structs --
+
+		public struct ReflectionStruct
+		{
+			[UsedImplicitly] private int _myPrivateInt;
+			[UsedImplicitly] private int MyIntProperty { get; set; }
 		}
 
 		#endregion
